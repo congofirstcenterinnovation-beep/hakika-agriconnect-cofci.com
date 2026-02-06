@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hakika Agriconnect</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+body{
+margin:0;
+font-family:Poppins;
+background:#050b18;
+color:#dbeafe;
+scroll-behavior:smooth;
+}
+/* MENU */
+nav{
+position:fixed;
+top:0;
+width:100%;
+background:rgba(5,11,24,0.95);
+backdrop-filter:blur(10px);
+padding:15px;
+z-index:1000;
+}
+nav ul{
+display:flex;
+justify-content:center;
+gap:25px;
+list-style:none;
+margin:0;
+padding:0;
+}
+nav a{
+color:#60a5fa;
+text-decoration:none;
+font-weight:600;
+transition:0.3s;
+}
+nav a:hover{color:#93c5fd;}
+/* SECTIONS */
+section{
+min-height:100vh;
+padding:100px 20px;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+text-align:center;
+background-size:cover;
+background-position:center;
+scroll-margin-top:80px;
+}
+/* TITRE */
+h1{font-size:40px;margin-bottom:10px;}
+h2{color:#93c5fd;}
+/* CARD */
+.card{
+background:rgba(15,23,42,0.85);
+padding:20px;
+border-radius:15px;
+margin:15px;
+width:320px;
+box-shadow:0 0 20px rgba(96,165,250,0.3);
+transition:0.3s;
+}
+.card:hover{
+transform:translateY(-5px);
+box-shadow:0 0 25px rgba(96,165,250,0.5);
+}
+/* INPUT */
+input,textarea,select{
+width:90%;
+padding:12px;
+margin:10px 0;
+border:none;
+border-radius:8px;
+background:#020617;
+color:white;
+}
+/* BUTTON */
+button{
+padding:12px 20px;
+border:none;
+border-radius:8px;
+background:#2563eb;
+color:white;
+cursor:pointer;
+transition:0.3s;
+}
+button:hover{background:#1d4ed8;transform:scale(1.05);}
+/* GRID */
+.grid{display:flex;flex-wrap:wrap;justify-content:center;gap:15px;}
+/* CHAT */
+#chatBox{height:250px;overflow-y:auto;background:#020617;padding:10px;border-radius:10px;margin-bottom:10px;width:300px;}
+img.agri{width:100%;border-radius:12px;margin-top:10px;}
+/* FOOTER */
+footer{
+background:rgba(5,11,24,0.9);
+color:#60a5fa;
+padding:20px;
+text-align:center;
+}
+footer a{
+color:#60a5fa;
+margin:0 10px;
+text-decoration:none;
+}
+footer a:hover{color:#93c5fd;}
+#footerLoginBtn{
+margin-top:10px;
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+<ul>
+<li><a href="#home">Accueil</a></li>
+<li><a href="#about">À propos</a></li>
+<li><a href="#market">Marketplace</a></li>
+<li><a href="#chat">Chat</a></li>
+<li><a href="#geo">Géolocalisation</a></li>
+<li><a href="#stats">Statistiques</a></li>
+<li><a href="#meteo">Météo</a></li>
+<li><a href="#ai">Assistant IA</a></li>
+<li><a href="#partner">Partenaire</a></li>
+</ul>
+</nav>
+
+<!-- 1 ACCUEIL -->
+<section id="home" style="background-image:url('https://images.unsplash.com/photo-1592982537447-6d96e902ef4c');">
+<h1>Hakika Agriconnect</h1>
+<h2>Connecter les agriculteurs africains au marché réel</h2>
+<p>Produisez. Publiez. Vendez. Transformez votre récolte en opportunité.</p>
+
+<!-- IA intégrée sur accueil -->
+<div class="card">
+<h3>Assistant IA agricole</h3>
+<div id="aiBoxHome"></div>
+<input id="aiInputHome" placeholder="Pose ta question agricole">
+<button onclick="askAIHome()">Demander</button>
+</div>
+</section>
+
+<!-- 2 A PROPOS -->
+<section id="about" style="background-image:url('https://images.unsplash.com/photo-1500937386664-56d1dfef3854');">
+<h1>Notre mission</h1>
+<div class="card">
+<p>Hakika Agriconnect digitalise l'agriculture locale et connecte producteurs, acheteurs et investisseurs.</p>
+<img class="agri" src="https://images.unsplash.com/photo-1574943320219-553eb213f72d">
+</div>
+</section>
+
+<!-- 3 MARKETPLACE -->
+<section id="market" style="background-image:url('https://images.unsplash.com/photo-1464226184884-fa280b87c399');">
+<h1>Marketplace agricole</h1>
+<div class="card">
+<input id="prodName" placeholder="Nom du produit">
+<input type="file" id="prodImg">
+<select id="payMethod">
+<option value="Orange Money">Orange Money</option>
+<option value="Airtel Money">Airtel Money</option>
+<option value="Vodacom Money">Vodacom Money</option>
+</select>
+<button onclick="addProduct()">Publier produit</button>
+</div>
+<div id="products" class="grid"></div>
+</section>
+
+<!-- 4 CHAT -->
+<section id="chat" style="background-image:url('https://images.unsplash.com/photo-1523741543316-beb7fc7023d8');">
+<h1>Espace discussion producteurs</h1>
+<div id="chatBox"></div>
+<input id="chatInput" placeholder="Votre message">
+<button onclick="sendMsg()">Envoyer</button>
+</section>
+
+<!-- 5 GEO -->
+<section id="geo" style="background-image:url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee');">
+<h1>Localiser votre champ</h1>
+<button onclick="geo()">Activer géolocalisation</button>
+<p id="geoResult"></p>
+</section>
+
+<!-- 6 STATS -->
+<section id="stats" style="background-image:url('https://images.unsplash.com/photo-1454165804606-c3d57bc86b40');">
+<h1>Statistiques agricoles</h1>
+<canvas id="chart" width="300"></canvas>
+</section>
+
+<!-- 7 METEO -->
+<section id="meteo" style="background-image:url('https://images.unsplash.com/photo-1504384308090-c894fdcc538d');">
+<h1>Météo Goma IA</h1>
+<p id="weather"></p>
+</section>
+
+<!-- 8 ASSISTANT IA (page dédiée) -->
+<section id="ai" style="background-image:url('https://images.unsplash.com/photo-1518779578993-ec3579fee39f');">
+<h1>Assistant IA agricole</h1>
+<div id="aiBox"></div>
+<input id="aiInput" placeholder="Pose ta question agricole">
+<button onclick="askAI()">Demander</button>
+</section>
+
+<!-- 9 LOGIN -->
+<section id="login" style="background-image:url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f');display:none;">
+<h1>Espace utilisateur</h1>
+<input id="email" placeholder="Email">
+<input id="password" placeholder="Mot de passe">
+<button onclick="loginUser()">Connexion</button>
+<h2>Créer compte</h2>
+<input id="fullname" placeholder="Nom complet">
+<input id="phone" placeholder="Téléphone">
+<input id="newEmail" placeholder="Email">
+<input id="newPassword" placeholder="Mot de passe">
+<button onclick="createUser()">Créer</button>
+</section>
+
+<!-- 10 PARTENAIRE -->
+<section id="partner" style="background-image:url('https://images.unsplash.com/photo-1507679799987-c73779587ccf');">
+<h1>Devenir partenaire Hakika</h1>
+<input placeholder="Nom entreprise">
+<input placeholder="Contact">
+<textarea placeholder="Proposition partenariat"></textarea>
+<button>Envoyer demande</button>
+</section>
+
+<!-- FOOTER -->
+<footer>
+<a href="#">FAQ</a> | <a href="#">Confidentialité</a>
+<br>
+<button id="footerLoginBtn" onclick="document.getElementById('login').scrollIntoView({behavior:'smooth'})">Se connecter</button>
+</footer>
+
+<script>
+// ===== FIREBASE CONFIG =====
+const firebaseConfig = {
+apiKey: "VOTRE_API_KEY",
+authDomain: "VOTRE_AUTH_DOMAIN",
+databaseURL: "VOTRE_DB_URL",
+projectId: "VOTRE_PROJECT_ID",
+storageBucket: "VOTRE_BUCKET",
+messagingSenderId: "VOTRE_MSG_SENDER",
+appId: "VOTRE_APP_ID"
+};
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.database();
+const storage = firebase.storage();
+
+// ===== AUTH =====
+function createUser(){
+  const email=document.getElementById("newEmail").value;
+  const password=document.getElementById("newPassword").value;
+  const fullname=document.getElementById("fullname").value;
+  const phone=document.getElementById("phone").value;
+  auth.createUserWithEmailAndPassword(email,password)
+  .then(user=>{
+    db.ref('users/'+user.user.uid).set({fullname,email,phone});
+    alert("Compte créé !");
+  }).catch(err=>alert(err.message));
+}
+function loginUser(){
+  const email=document.getElementById("email").value;
+  const password=document.getElementById("password").value;
+  auth.signInWithEmailAndPassword(email,password)
+  .then(()=>alert("Connexion réussie !"))
+  .catch(err=>alert(err.message));
+}
+
+// ===== MARKETPLACE FIREBASE =====
+function addProduct(){
+  const name=document.getElementById("prodName").value;
+  const file=document.getElementById("prodImg").files[0];
+  const pay=document.getElementById("payMethod").value;
+  const time=new Date().toLocaleString();
+  if(!file){alert("Ajouter une image"); return;}
+  const storageRef=storage.ref('products/'+file.name);
+  storageRef.put(file).then(snapshot=>{
+    snapshot.ref.getDownloadURL().then(url=>{
+      const prodRef=db.ref('products').push();
+      prodRef.set({name,url,pay,time});
+    });
+  });
+}
+db.ref('products').on('value',snapshot=>{
+  const grid=document.getElementById("products");
+  grid.innerHTML="";
+  snapshot.forEach(prod=>{
+    const p=prod.val();
+    const div=document.createElement("div");
+    div.className="card";
+    div.innerHTML=`<h3>${p.name}</h3><img class="agri" src="${p.url}"><p>${p.pay} | ${p.time}</p>`;
+    grid.appendChild(div);
+  });
+});
+
+// ===== CHAT FIREBASE =====
+function sendMsg(){
+  const input=document.getElementById("chatInput");
+  if(input.value.trim()==="") return;
+  const msgRef=db.ref('chat').push();
+  msgRef.set({msg:input.value,time:new Date().toLocaleString()});
+  input.value="";
+}
+db.ref('chat').on('value',snapshot=>{
+  const box=document.getElementById("chatBox");
+  box.innerHTML="";
+  snapshot.forEach(m=>{
+    const mVal=m.val();
+    box.innerHTML+=`<p><b>Agriculteur :</b> ${mVal.msg} <small>(${mVal.time})</small></p>`;
+  });
+  box.scrollTop=box.scrollHeight;
+});
+
+// ===== GEO =====
+function geo(){
+navigator.geolocation.getCurrentPosition(pos=>{
+document.getElementById("geoResult").innerText=
+"Latitude : "+pos.coords.latitude+" Longitude : "+pos.coords.longitude;
+});
+}
+
+// ===== STATS =====
+new Chart(document.getElementById("chart"),{
+type:"line",
+data:{labels:["Jan","Fev","Mar","Avr","Mai"],datasets:[{label:"Production",data:[12,19,8,15,22]}]}
+});
+
+// ===== METEO =====
+async function fetchWeather(){
+const apiKey="VOTRE_OPENWEATHER_API_KEY";
+const url=`https://api.openweathermap.org/data/2.5/weather?q=Goma,CD&appid=${apiKey}&units=metric`;
+try{const res=await fetch(url);const data=await res.json();
+document.getElementById("weather").innerText=`${data.weather[0].description}, ${data.main.temp}°C`;
+}catch(e){document.getElementById("weather").innerText="Météo non disponible";}
+}
+fetchWeather();
+
+// ===== IA AGRICOLE =====
+function askAI(){
+let q=document.getElementById("aiInput").value.toLowerCase();
+let r="Analyse en cours...";
+if(q.includes("maïs")) r="Fertilisation organique et arrosage régulier.";
+if(q.includes("haricot")) r="Sol riche et ensoleillement modéré.";
+if(q.includes("tomate")) r="Arrosage régulier, sol riche, surveiller maladies.";
+if(q.includes("prix")) r="Consultez le marché en temps réel pour fixer votre prix.";
+if(q.includes("investisseur")) r="Opportunités disponibles pour investisseurs.";
+document.getElementById("aiBox").innerHTML+=`<p>${r}</p>`;
+}
+function askAIHome(){
+let q=document.getElementById("aiInputHome").value.toLowerCase();
+let r="Analyse en cours...";
+if(q.includes("maïs")) r="Fertilisation organique et arrosage régulier.";
+if(q.includes("haricot")) r="Sol riche et ensoleillement modéré.";
+if(q.includes("tomate")) r="Arrosage régulier, sol riche, surveiller maladies.";
+if(q.includes("prix")) r="Consultez le marché en temps réel pour fixer votre prix.";
+if(q.includes("investisseur")) r="Opportunités disponibles pour investisseurs.";
+document.getElementById("aiBoxHome").innerHTML+=`<p>${r}</p>`;
+}
+</script>
+</body>
+  </html>
