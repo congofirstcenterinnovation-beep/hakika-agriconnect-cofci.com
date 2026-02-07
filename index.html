@@ -4,124 +4,36 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Hakika Agriconnect</title>
-
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 <style>
-body{
-margin:0;
-font-family:Poppins;
-background:#050b18;
-color:#dbeafe;
-scroll-behavior:smooth;
-}
-/* MENU */
-nav{
-position:fixed;
-top:0;
-width:100%;
-background:rgba(5,11,24,0.95);
-backdrop-filter:blur(10px);
-padding:15px;
-z-index:1000;
-}
-nav ul{
-display:flex;
-justify-content:center;
-gap:25px;
-list-style:none;
-margin:0;
-padding:0;
-}
-nav a{
-color:#60a5fa;
-text-decoration:none;
-font-weight:600;
-transition:0.3s;
-}
+body{margin:0;font-family:Poppins;background:#050b18;color:#dbeafe;scroll-behavior:smooth;}
+nav{position:fixed;top:0;width:100%;background:rgba(5,11,24,0.95);backdrop-filter:blur(10px);padding:15px;z-index:1000;}
+nav ul{display:flex;justify-content:center;gap:25px;list-style:none;margin:0;padding:0;}
+nav a{color:#60a5fa;text-decoration:none;font-weight:600;transition:0.3s;}
 nav a:hover{color:#93c5fd;}
-/* SECTIONS */
-section{
-min-height:100vh;
-padding:100px 20px;
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
-text-align:center;
-background-size:cover;
-background-position:center;
-scroll-margin-top:80px;
-}
-/* TITRE */
-h1{font-size:40px;margin-bottom:10px;}
-h2{color:#93c5fd;}
-/* CARD */
-.card{
-background:rgba(15,23,42,0.85);
-padding:20px;
-border-radius:15px;
-margin:15px;
-width:320px;
-box-shadow:0 0 20px rgba(96,165,250,0.3);
-transition:0.3s;
-}
-.card:hover{
-transform:translateY(-5px);
-box-shadow:0 0 25px rgba(96,165,250,0.5);
-}
-/* INPUT */
-input,textarea,select{
-width:90%;
-padding:12px;
-margin:10px 0;
-border:none;
-border-radius:8px;
-background:#020617;
-color:white;
-}
-/* BUTTON */
-button{
-padding:12px 20px;
-border:none;
-border-radius:8px;
-background:#2563eb;
-color:white;
-cursor:pointer;
-transition:0.3s;
-}
+section{min-height:100vh;padding:100px 20px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;background-size:cover;background-position:center;scroll-margin-top:80px;}
+h1{font-size:40px;margin-bottom:10px;} h2{color:#93c5fd;}
+.card{background:rgba(15,23,42,0.85);padding:20px;border-radius:15px;margin:15px;width:320px;box-shadow:0 0 20px rgba(96,165,250,0.3);transition:0.3s;}
+.card:hover{transform:translateY(-5px);box-shadow:0 0 25px rgba(96,165,250,0.5);}
+input,textarea,select{width:90%;padding:12px;margin:10px 0;border:none;border-radius:8px;background:#020617;color:white;}
+button{padding:12px 20px;border:none;border-radius:8px;background:#2563eb;color:white;cursor:pointer;transition:0.3s;}
 button:hover{background:#1d4ed8;transform:scale(1.05);}
-/* GRID */
 .grid{display:flex;flex-wrap:wrap;justify-content:center;gap:15px;}
-/* CHAT */
 #chatBox{height:250px;overflow-y:auto;background:#020617;padding:10px;border-radius:10px;margin-bottom:10px;width:300px;}
 img.agri{width:100%;border-radius:12px;margin-top:10px;}
-/* FOOTER */
-footer{
-background:rgba(5,11,24,0.9);
-color:#60a5fa;
-padding:20px;
-text-align:center;
-}
-footer a{
-color:#60a5fa;
-margin:0 10px;
-text-decoration:none;
-}
+#map{height:300px;width:90%;border-radius:12px;margin-top:10px;}
+footer{background:rgba(5,11,24,0.9);color:#60a5fa;padding:20px;text-align:center;}
+footer a{color:#60a5fa;margin:0 10px;text-decoration:none;}
 footer a:hover{color:#93c5fd;}
-#footerLoginBtn{
-margin-top:10px;
-}
+#footerLoginBtn{margin-top:10px;}
 </style>
 </head>
-
 <body>
-
 <nav>
 <ul>
 <li><a href="#home">Accueil</a></li>
@@ -129,8 +41,8 @@ margin-top:10px;
 <li><a href="#market">Marketplace</a></li>
 <li><a href="#chat">Chat</a></li>
 <li><a href="#geo">Géolocalisation</a></li>
-<li><a href="#stats">Statistiques</a></li>
 <li><a href="#meteo">Météo</a></li>
+<li><a href="#stats">Statistiques</a></li>
 <li><a href="#ai">Assistant IA</a></li>
 <li><a href="#partner">Partenaire</a></li>
 </ul>
@@ -141,8 +53,6 @@ margin-top:10px;
 <h1>Hakika Agriconnect</h1>
 <h2>Connecter les agriculteurs africains au marché réel</h2>
 <p>Produisez. Publiez. Vendez. Transformez votre récolte en opportunité.</p>
-
-<!-- IA intégrée sur accueil -->
 <div class="card">
 <h3>Assistant IA agricole</h3>
 <div id="aiBoxHome"></div>
@@ -187,23 +97,30 @@ margin-top:10px;
 <!-- 5 GEO -->
 <section id="geo" style="background-image:url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee');">
 <h1>Localiser votre champ</h1>
-<button onclick="geo()">Activer géolocalisation</button>
+<button onclick="geo()">Afficher ma position</button>
 <p id="geoResult"></p>
+<div id="map"></div>
 </section>
 
-<!-- 6 STATS -->
+<!-- 6 METEO -->
+<section id="meteo" style="background-image:url('https://images.unsplash.com/photo-1504384308090-c894fdcc538d');">
+<h1>Météo Goma IA</h1>
+<div class="card" id="weatherCard">
+<p id="weatherDesc"></p>
+<p id="weatherTemp"></p>
+<p id="weatherHum"></p>
+<p id="weatherWind"></p>
+<p id="weatherSun"></p>
+</div>
+</section>
+
+<!-- 7 STATS -->
 <section id="stats" style="background-image:url('https://images.unsplash.com/photo-1454165804606-c3d57bc86b40');">
 <h1>Statistiques agricoles</h1>
 <canvas id="chart" width="300"></canvas>
 </section>
 
-<!-- 7 METEO -->
-<section id="meteo" style="background-image:url('https://images.unsplash.com/photo-1504384308090-c894fdcc538d');">
-<h1>Météo Goma IA</h1>
-<p id="weather"></p>
-</section>
-
-<!-- 8 ASSISTANT IA (page dédiée) -->
+<!-- 8 IA -->
 <section id="ai" style="background-image:url('https://images.unsplash.com/photo-1518779578993-ec3579fee39f');">
 <h1>Assistant IA agricole</h1>
 <div id="aiBox"></div>
@@ -234,7 +151,6 @@ margin-top:10px;
 <button>Envoyer demande</button>
 </section>
 
-<!-- FOOTER -->
 <footer>
 <a href="#">FAQ</a> | <a href="#">Confidentialité</a>
 <br>
@@ -244,18 +160,19 @@ margin-top:10px;
 <script>
 // ===== FIREBASE CONFIG =====
 const firebaseConfig = {
-apiKey: "VOTRE_API_KEY",
-authDomain: "VOTRE_AUTH_DOMAIN",
-databaseURL: "VOTRE_DB_URL",
-projectId: "VOTRE_PROJECT_ID",
-storageBucket: "VOTRE_BUCKET",
-messagingSenderId: "VOTRE_MSG_SENDER",
-appId: "VOTRE_APP_ID"
+apiKey: "AIzaSyADgmdNHD9czAWeAkR_eEJS3OHbqBg8Rd4",
+authDomain: "hakika-agriconnect-cofci-3a733.firebaseapp.com",
+databaseURL: "https://hakika-agriconnect-cofci-3a733-default-rtdb.firebaseio.com",
+projectId: "hakika-agriconnect-cofci-3a733",
+storageBucket: "hakika-agriconnect-cofci-3a733.appspot.com",
+messagingSenderId: "395415064040",
+appId: "1:395415064040:web:9bf84863feeb20a918285d",
+measurementId: "G-T72RE8Z3X2"
 };
 firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db = firebase.database();
-const storage = firebase.storage();
+const auth=firebase.auth();
+const db=firebase.database();
+const storage=firebase.storage();
 
 // ===== AUTH =====
 function createUser(){
@@ -277,7 +194,7 @@ function loginUser(){
   .catch(err=>alert(err.message));
 }
 
-// ===== MARKETPLACE FIREBASE =====
+// ===== MARKETPLACE =====
 function addProduct(){
   const name=document.getElementById("prodName").value;
   const file=document.getElementById("prodImg").files[0];
@@ -285,17 +202,17 @@ function addProduct(){
   const time=new Date().toLocaleString();
   if(!file){alert("Ajouter une image"); return;}
   const storageRef=storage.ref('products/'+file.name);
-  storageRef.put(file).then(snapshot=>{
-    snapshot.ref.getDownloadURL().then(url=>{
+  storageRef.put(file).then(snap=>{
+    snap.ref.getDownloadURL().then(url=>{
       const prodRef=db.ref('products').push();
       prodRef.set({name,url,pay,time});
     });
   });
 }
-db.ref('products').on('value',snapshot=>{
+db.ref('products').on('value',snap=>{
   const grid=document.getElementById("products");
   grid.innerHTML="";
-  snapshot.forEach(prod=>{
+  snap.forEach(prod=>{
     const p=prod.val();
     const div=document.createElement("div");
     div.className="card";
@@ -304,7 +221,7 @@ db.ref('products').on('value',snapshot=>{
   });
 });
 
-// ===== CHAT FIREBASE =====
+// ===== CHAT =====
 function sendMsg(){
   const input=document.getElementById("chatInput");
   if(input.value.trim()==="") return;
@@ -312,10 +229,10 @@ function sendMsg(){
   msgRef.set({msg:input.value,time:new Date().toLocaleString()});
   input.value="";
 }
-db.ref('chat').on('value',snapshot=>{
+db.ref('chat').on('value',snap=>{
   const box=document.getElementById("chatBox");
   box.innerHTML="";
-  snapshot.forEach(m=>{
+  snap.forEach(m=>{
     const mVal=m.val();
     box.innerHTML+=`<p><b>Agriculteur :</b> ${mVal.msg} <small>(${mVal.time})</small></p>`;
   });
@@ -325,48 +242,68 @@ db.ref('chat').on('value',snapshot=>{
 // ===== GEO =====
 function geo(){
 navigator.geolocation.getCurrentPosition(pos=>{
-document.getElementById("geoResult").innerText=
-"Latitude : "+pos.coords.latitude+" Longitude : "+pos.coords.longitude;
+const lat=pos.coords.latitude;
+const lon=pos.coords.longitude;
+document.getElementById("geoResult").innerText=`Latitude: ${lat} Longitude: ${lon}`;
+const mapDiv=document.getElementById("map");
+mapDiv.innerHTML=`<iframe width="100%" height="300" src="https://maps.google.com/maps?q=${lat},${lon}&z=15&output=embed"></iframe>`;
 });
 }
 
 // ===== STATS =====
-new Chart(document.getElementById("chart"),{
-type:"line",
-data:{labels:["Jan","Fev","Mar","Avr","Mai"],datasets:[{label:"Production",data:[12,19,8,15,22]}]}
-});
+new Chart(document.getElementById("chart"),{type:"line",data:{labels:["Jan","Fev","Mar","Avr","Mai"],datasets:[{label:"Production",data:[12,19,8,15,22]}]}});
 
 // ===== METEO =====
+const WEATHER_API_KEY = "dced199e16bf91df98f41aabc3f8984b";
 async function fetchWeather(){
-const apiKey="VOTRE_OPENWEATHER_API_KEY";
-const url=`https://api.openweathermap.org/data/2.5/weather?q=Goma,CD&appid=${apiKey}&units=metric`;
-try{const res=await fetch(url);const data=await res.json();
-document.getElementById("weather").innerText=`${data.weather[0].description}, ${data.main.temp}°C`;
-}catch(e){document.getElementById("weather").innerText="Météo non disponible";}
+try{
+const res=await fetch(`https://api.openweathermap.org/data/2.5/weather?q=Goma,CD&appid=${WEATHER_API_KEY}&units=metric`);
+const data=await res.json();
+document.getElementById("weatherDesc").innerText=`${data.weather[0].description}`;
+document.getElementById("weatherTemp").innerText=`Temp: ${data.main.temp}°C`;
+document.getElementById("weatherHum").innerText=`Humidité: ${data.main.humidity}%`;
+document.getElementById("weatherWind").innerText=`Vent: ${data.wind.speed} m/s`;
+const sunrise=new Date(data.sys.sunrise*1000).toLocaleTimeString();
+const sunset=new Date(data.sys.sunset*1000).toLocaleTimeString();
+document.getElementById("weatherSun").innerText=`Lever: ${sunrise} | Coucher: ${sunset}`;
+}catch(e){document.getElementById("weatherCard").innerText="Météo non disponible";}
 }
 fetchWeather();
 
-// ===== IA AGRICOLE =====
-function askAI(){
-let q=document.getElementById("aiInput").value.toLowerCase();
-let r="Analyse en cours...";
-if(q.includes("maïs")) r="Fertilisation organique et arrosage régulier.";
-if(q.includes("haricot")) r="Sol riche et ensoleillement modéré.";
-if(q.includes("tomate")) r="Arrosage régulier, sol riche, surveiller maladies.";
-if(q.includes("prix")) r="Consultez le marché en temps réel pour fixer votre prix.";
-if(q.includes("investisseur")) r="Opportunités disponibles pour investisseurs.";
-document.getElementById("aiBox").innerHTML+=`<p>${r}</p>`;
+// ===== IA GPT =====
+const OPENAI_KEY="dced199e16bf91df98f41aabc3f8984b";
+async function askAI(){
+const q=document.getElementById("aiInput").value;
+const rBox=document.getElementById("aiBox");
+rBox.innerHTML+="<p>Analyse en cours...</p>";
+const res=await fetch("https://api.openai.com/v1/responses",{
+method:"POST",
+headers:{
+"Content-Type":"application/json",
+"Authorization":`Bearer ${OPENAI_KEY}`
+},
+body:JSON.stringify({model:"gpt-5-nano",input:q})
+});
+const data=await res.json();
+const answer=data.output_text || "Aucune réponse";
+rBox.innerHTML+=`<p>${answer}</p>`;
 }
-function askAIHome(){
-let q=document.getElementById("aiInputHome").value.toLowerCase();
-let r="Analyse en cours...";
-if(q.includes("maïs")) r="Fertilisation organique et arrosage régulier.";
-if(q.includes("haricot")) r="Sol riche et ensoleillement modéré.";
-if(q.includes("tomate")) r="Arrosage régulier, sol riche, surveiller maladies.";
-if(q.includes("prix")) r="Consultez le marché en temps réel pour fixer votre prix.";
-if(q.includes("investisseur")) r="Opportunités disponibles pour investisseurs.";
-document.getElementById("aiBoxHome").innerHTML+=`<p>${r}</p>`;
+async function askAIHome(){
+const q=document.getElementById("aiInputHome").value;
+const rBox=document.getElementById("aiBoxHome");
+rBox.innerHTML+="<p>Analyse en cours...</p>";
+const res=await fetch("https://api.openai.com/v1/responses",{
+method:"POST",
+headers:{
+"Content-Type":"application/json",
+"Authorization":`Bearer ${OPENAI_KEY}`
+},
+body:JSON.stringify({model:"gpt-5-nano",input:q})
+});
+const data=await res.json();
+const answer=data.output_text || "Aucune réponse";
+rBox.innerHTML+=`<p>${answer}</p>`;
 }
 </script>
 </body>
-  </html>
+</html>
