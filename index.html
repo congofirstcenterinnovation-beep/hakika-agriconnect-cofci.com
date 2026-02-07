@@ -4,12 +4,24 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Hakika Agriconnect</title>
+
+<!-- Fonts et styles -->
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+
+<!-- Chart JS -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- PWA Manifest -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1a4d2e">
+
+<!-- Styles -->
 <style>
 body{margin:0;font-family:Poppins;background:#050b18;color:#dbeafe;scroll-behavior:smooth;}
 nav{position:fixed;top:0;width:100%;background:rgba(5,11,24,0.95);backdrop-filter:blur(10px);padding:15px;z-index:1000;}
@@ -32,6 +44,17 @@ footer a{color:#60a5fa;margin:0 10px;text-decoration:none;}
 footer a:hover{color:#93c5fd;}
 #footerLoginBtn{margin-top:10px;}
 </style>
+</head>
+<body>
+
+<!-- Service Worker -->
+<script>
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("service-worker.js")
+    .then(() => console.log("Service Worker activé"))
+    .catch(err => console.log("Erreur Service Worker:", err));
+}
+</script>
 </head>
 <body>
 <nav>
