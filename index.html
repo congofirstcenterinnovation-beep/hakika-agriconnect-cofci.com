@@ -34,7 +34,7 @@ img.sectionImg{width:100%;border-radius:12px;margin-top:15px;box-shadow:0 2px 4p
 <body>
 
 <header>
-🌍 Connecter les agriculteurs africains au marché réel
+🌍 Hakika agriconnect Congo First Center Innovation
 <button onclick="toggleLogin()">Connexion / Inscription</button>
 </header>
 
@@ -272,7 +272,8 @@ function getLocation(){
 
 if(!navigator.geolocation){
 
-alert("Géolocalisation non supportée");
+alert("GPS non supporté sur cet appareil");
+loadWeather(-1.6792, 29.2228); // fallback Goma
 return;
 
 }
@@ -291,9 +292,10 @@ loadWeather(lat, lon);
 
 },
 
-err => {
+error => {
 
-alert("Autorisez la localisation pour voir la météo");
+alert("Localisation refusée → météo par défaut affichée");
+loadWeather(-1.6792, 29.2228);
 
 }
 
@@ -301,16 +303,27 @@ alert("Autorisez la localisation pour voir la météo");
 
 }
 
-/* Charger météo automatiquement quand page météo ouverte */
+
+/* AUTO METEO AU DEMARRAGE */
 function autoWeather(){
 
 if(navigator.geolocation){
 
-navigator.geolocation.getCurrentPosition(pos => {
+navigator.geolocation.getCurrentPosition(
 
+pos => {
 loadWeather(pos.coords.latitude, pos.coords.longitude);
+},
 
-});
+error => {
+loadWeather(-1.6792, 29.2228); // fallback si refus
+}
+
+);
+
+}else{
+
+loadWeather(-1.6792, 29.2228);
 
 }
 
@@ -342,4 +355,4 @@ alert("Compte créé !");toggleLogin();
 </script>
 
 </body>
-</html>
+  </html>
