@@ -29,6 +29,8 @@ input,textarea{width:100%;padding:8px;margin-top:8px;border-radius:8px;border:1p
 h2{margin-bottom:15px;text-shadow:1px 1px 2px #000;}
 img.sectionImg{width:100%;border-radius:12px;margin-top:15px;box-shadow:0 2px 4px rgba(0,0,0,0.3);}
 .card{background:rgba(255,255,255,0.9);color:#000;padding:15px;border-radius:12px;margin-bottom:15px;box-shadow:0 2px 6px rgba(0,0,0,0.2);}
+.weatherHot{background:rgba(255,100,50,0.6);}
+.weatherCold{background:rgba(50,150,255,0.6);}
 </style>
 </head>
 <body>
@@ -164,6 +166,7 @@ img.sectionImg{width:100%;border-radius:12px;margin-top:15px;box-shadow:0 2px 4p
 </div>
 </div>
 
+<!-- ================= SCRIPT ================= -->
 <script>
 const API_KEY = "618601d9a107d1798c46d59b2701c760";
 
@@ -184,8 +187,7 @@ let reader=new FileReader();
 reader.onload=function(){
 products.push({name,price,phone,img:reader.result});
 localStorage.setItem("products",JSON.stringify(products));
-displayProducts();
-closePopup();
+displayProducts();closePopup();
 };
 reader.readAsDataURL(file);
 }
@@ -207,138 +209,53 @@ container.innerHTML+=`
 }
 displayProducts();
 function buy(phone){window.location.href="tel:"+phone;}
-function share(i){let link=location.href+"#product"+i;navigator.clipboard.writeText(link);alert("Lien copié !");}
-function downloadProduct(i){
-let p=products[i];
-let data = `Nom: ${p.name}\nPrix: ${p.price}\nTéléphone: ${p.phone}`;
-let blob = new Blob([data], {type:"text/plain"});
-let url = URL.createObjectURL(blob);
-let a = document.createElement("a"); a.href=url; a.download=p.name+".txt"; a.click(); URL.revokeObjectURL(url);
-}
+function share(i){navigator.clipboard.writeText(location.href+"#product"+i);alert("Lien copié !");}
+function downloadProduct(i){let p=products[i];let data=`Nom: ${p.name}\nPrix: ${p.price}\nTéléphone: ${p.phone}`;let blob=new Blob([data],{type:"text/plain"});let url=URL.createObjectURL(blob);let a=document.createElement("a");a.href=url;a.download=p.name+".txt";a.click();URL.revokeObjectURL(url);}
 
 /* IA */
-function askAI(){
-let input=aiInput.value.toLowerCase();
-let chat=document.getElementById("aiChat");
-let rep="";
-if(input.includes("engrais")) rep="Utilisez compost organique ou NPK équilibré.";
-else if(input.includes("pluie")) rep="Planifiez semis avant saison pluvieuse.";
-else rep="Je conseille rotation cultures et analyse sol.";
-chat.innerHTML+=`<p><b>Vous:</b> ${input}</p><p><b>IA:</b> ${rep}</p>`;
-chat.scrollTop=chat.scrollHeight;
-}
+function askAI(){let input=aiInput.value.toLowerCase();let chat=document.getElementById("aiChat");let rep="";if(input.includes("engrais")) rep="Utilisez compost organique ou NPK équilibré."; else if(input.includes("pluie")) rep="Planifiez semis avant saison pluvieuse."; else rep="Je conseille rotation cultures et analyse sol."; chat.innerHTML+=`<p><b>Vous:</b> ${input}</p><p><b>IA:</b> ${rep}</p>`; chat.scrollTop=chat.scrollHeight;}
 
-/* ===== METEO + LOCALISATION PROFESSIONNEL ===== */
-
+/* MÉTÉO */
 async function loadWeather(lat, lon){
-
 try{
-
-let res = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=a5c54e882dfe6ea680cb7ec514fa88bd&units=metric&lang=fr`);
-
-let data = await res.json();
-
-/* Conseils agricoles intelligents */
+let res=await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric&lang=fr`);
+let data=await res.json();
 let conseil="Conditions normales pour agriculture.";
-if(data.main.humidity > 80) conseil="⚠ Forte humidité : surveiller maladies fongiques.";
-if(data.wind.speed > 8) conseil="⚠ Vent fort : protéger cultures fragiles.";
-if(data.main.temp > 32) conseil="⚠ Forte chaleur : arroser tôt matin ou soir.";
-
-/* Affichage météo principal */
-let weatherHTML = `
-🌍 Ville : ${data.name} <br>
+if(data.main.humidity>80) conseil="⚠ Forte humidité : surveiller maladies fongiques.";
+if(data.wind.speed>8) conseil="⚠ Vent fort : protéger cultures fragiles.";
+if(data.main.temp>32) conseil="⚠ Forte chaleur : arroser tôt matin ou soir.";
+let icon=data.weather[0].icon;
+let weatherHTML=`🌍 Ville : ${data.name} <br>
+<img src="https://openweathermap.org/img/wn/${icon}@2x.png" alt="météo"><br>
 🌡 Température : ${data.main.temp} °C <br>
 💨 Vent : ${data.wind.speed} m/s <br>
 💧 Humidité : ${data.main.humidity}% <br>
 🌦 Description : ${data.weather[0].description} <br>
-🌱 Conseil agricole : ${conseil}
-`;
-
-document.getElementById("weather").innerHTML = weatherHTML;
-document.getElementById("weatherGPS").innerHTML = weatherHTML;
-
-}catch(error){
-
-document.getElementById("weather").innerHTML="Impossible de charger météo";
-document.getElementById("weatherGPS").innerHTML="Impossible de charger météo";
-
+🌱 Conseil agricole : ${conseil}`;
+document.getElementById("weather").innerHTML=weatherHTML;
+document.getElementById("weatherGPS").innerHTML=weatherHTML;
+}catch(error){console.error(error);document.getElementById("weather").innerHTML="Impossible de charger météo";document.getElementById("weatherGPS").innerHTML="Impossible de charger météo";}
 }
 
-}
-
-/* ===== GPS ===== */
-
+/* LOCALISATION */
 function getLocation(){
-
-if(!navigator.geolocation){
-
-alert("Géolocalisation non supportée");
-return;
-
+if(!navigator.geolocation){alert("Géolocalisation non supportée");document.getElementById("location").innerText="Localisation non supportée";return;}
+navigator.geolocation.getCurrentPosition(pos=>{let lat=pos.coords.latitude;let lon=pos.coords.longitude;document.getElementById("location").innerText=`📍 Latitude : ${lat.toFixed(4)} | Longitude : ${lon.toFixed(4)}`;loadWeather(lat,lon);},err=>{alert("Autorisez la localisation pour voir la météo");document.getElementById("location").innerText="Localisation non autorisée";});
 }
 
-navigator.geolocation.getCurrentPosition(
+/* AUTO MÉTÉO */
+function autoWeather(){if(navigator.geolocation){navigator.geolocation.getCurrentPosition(pos=>{loadWeather(pos.coords.latitude,pos.coords.longitude);});}}
 
-pos => {
-
-let lat = pos.coords.latitude;
-let lon = pos.coords.longitude;
-
-document.getElementById("location").innerText =
-`📍 Latitude : ${lat.toFixed(4)} | Longitude : ${lon.toFixed(4)}`;
-
-loadWeather(lat, lon);
-
-},
-
-err => {
-
-alert("Autorisez la localisation pour voir la météo");
-
-}
-
-);
-
-}
-
-/* Charger météo automatiquement quand page météo ouverte */
-function autoWeather(){
-
-if(navigator.geolocation){
-
-navigator.geolocation.getCurrentPosition(pos => {
-
-loadWeather(pos.coords.latitude, pos.coords.longitude);
-
-});
-
-}
-
-}
-
-/* Lancer auto météo */
-window.onload = autoWeather;
 /* SCROLL FADE-IN */
-window.addEventListener("scroll",()=>{document.querySelectorAll("section").forEach(sec=>{let top=sec.getBoundingClientRect().top,h=window.innerHeight;if(top<h-100){sec.classList.add("active");}});});
+window.addEventListener("scroll",()=>{document.querySelectorAll("section").forEach(sec=>{let top=sec.getBoundingClientRect().top,h=window.innerHeight;if(top<h-100) sec.classList.add("active");if(sec.id==="meteo"&&!sec.dataset.loaded){sec.dataset.loaded=true;if(navigator.geolocation){navigator.geolocation.getCurrentPosition(pos=>{loadWeather(pos.coords.latitude,pos.coords.longitude);});}}});});
 
-/* LOGIN & CREATE (localStorage simulation simple) */
-function loginUser(){
-let email=document.getElementById("email").value;
-let password=document.getElementById("password").value;
-let users=JSON.parse(localStorage.getItem("users")||"[]");
-if(users.find(u=>u.email===email && u.password===password)){alert("Connexion réussie !");toggleLogin();}
-else alert("Email ou mot de passe incorrect.");
-}
-function createUser(){
-let name=document.getElementById("fullname").value;
-let phone=document.getElementById("phone").value;
-let email=document.getElementById("newEmail").value;
-let password=document.getElementById("newPassword").value;
-let users=JSON.parse(localStorage.getItem("users")||"[]");
-users.push({name,phone,email,password});
-localStorage.setItem("users",JSON.stringify(users));
-alert("Compte créé !");toggleLogin();
-}
+/* LOGIN / CREATE USER */
+function loginUser(){let email=document.getElementById("email").value;let password=document.getElementById("password").value;let users=JSON.parse(localStorage.getItem("users")||"[]");if(users.find(u=>u.email===email && u.password===password)){alert("Connexion réussie !");toggleLogin();}else alert("Email ou mot de passe incorrect.");}
+function createUser(){let name=document.getElementById("fullname").value;let phone=document.getElementById("phone").value;let email=document.getElementById("newEmail").value;let password=document.getElementById("newPassword").value;let users=JSON.parse(localStorage.getItem("users")||"[]");users.push({name,phone,email,password});localStorage.setItem("users",JSON.stringify(users));alert("Compte créé !");toggleLogin();}
+
+/* INITIALISATION */
+window.onload=autoWeather;
+displayProducts();
 </script>
 
 </body>
