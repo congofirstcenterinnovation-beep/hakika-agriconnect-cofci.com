@@ -3,379 +3,352 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hakika Agriconnect</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<title>Hakika Agriconnect Premium</title>
+
+<link rel="manifest" href="manifest.json">
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Poppins;}
-
 body{
-background:#f1f8e9;
-color:#1b5e20;
+font-family:Poppins,Arial;
+margin:0;
+background:#f3f7f3;
+scroll-behavior:smooth;
 }
 
 /* HEADER */
 header{
-background:#2e7d32;
+background:#2E7D32;
 color:white;
-padding:10px;
-display:flex;
-justify-content:space-between;
-align-items:center;
+padding:15px;
+text-align:center;
 position:sticky;
 top:0;
 z-index:1000;
+box-shadow:0 2px 8px rgba(0,0,0,0.2);
 }
 
-.small-btn{
-padding:6px 8px;
-font-size:0.75rem;
-border:none;
-border-radius:6px;
-background:#43a047;
-color:white;
-}
-
-/* NAV */
 nav{
-background:white;
 display:flex;
-overflow-x:auto;
-gap:10px;
-padding:6px;
+justify-content:center;
+gap:8px;
+flex-wrap:wrap;
+margin-top:8px;
 }
 
 nav a{
-font-size:0.8rem;
+background:white;
+padding:6px 12px;
+border-radius:20px;
 text-decoration:none;
-color:#2e7d32;
-font-weight:600;
+color:#2E7D32;
+font-size:12px;
 }
 
-/* SECTIONS */
+/* SECTION */
 section{
-padding:60px 12px;
-min-height:100vh;
+padding:35px 15px;
+max-width:900px;
+margin:auto;
+}
+
+h2{
 text-align:center;
-background-size:cover;
-background-position:center;
+color:#2E7D32;
+}
+
+/* BUTTON */
+.btn{
+background:#2E7D32;
+color:white;
+border:none;
+padding:8px 16px;
+border-radius:25px;
+cursor:pointer;
+margin-top:10px;
+font-size:13px;
 }
 
 /* CARD */
 .card{
 background:white;
-padding:12px;
+padding:14px;
 border-radius:12px;
-margin-top:10px;
-box-shadow:0 2px 6px rgba(0,0,0,0.1);
+margin-top:15px;
+box-shadow:0 2px 6px rgba(0,0,0,0.15);
 }
 
-button,input,select{
+img{
 width:100%;
-padding:8px;
-margin-top:8px;
-border-radius:7px;
-border:1px solid #ccc;
-font-size:0.85rem;
+border-radius:12px;
 }
 
-button{
-background:#2e7d32;
-color:white;
-}
-
-/* GRID */
-#products{
+/* MARKET */
+.grid{
 display:grid;
 gap:12px;
+}
+
+input,select{
+width:100%;
+padding:8px;
+margin-top:6px;
+border-radius:8px;
+border:1px solid #ccc;
 }
 
 /* POPUP */
 .popup{
 position:fixed;
-top:15%;
-left:50%;
-transform:translateX(-50%);
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.6);
+display:none;
+justify-content:center;
+align-items:center;
+}
+
+.popupBox{
+background:white;
+padding:20px;
+border-radius:12px;
 width:90%;
 max-width:350px;
-background:white;
-padding:15px;
-border-radius:12px;
-box-shadow:0 5px 15px rgba(0,0,0,0.3);
-display:none;
-z-index:2000;
 }
 
-.hide{display:none;}
-
-img{
-width:100%;
-border-radius:12px;
-margin-top:8px;
+/* CHAT */
+.chat{
+height:220px;
+overflow-y:auto;
+background:#eef7ee;
+padding:10px;
+border-radius:10px;
 }
 
+footer{
+background:#1B5E20;
+color:white;
+text-align:center;
+padding:20px;
+margin-top:40px;
+}
 </style>
 </head>
 
 <body>
 
 <header>
-<h3>Hakika Agriconnect</h3>
-<button class="small-btn" onclick="toggleLogin()">Connexion</button>
+🌍 Connecter les agriculteurs africains au marché réel
+<nav>
+<a href="#market">Marketplace</a>
+<a href="#ai">IA</a>
+<a href="#meteo">Météo</a>
+<a href="#gps">Localisation</a>
+</nav>
 </header>
 
-<nav>
-<a href="#home">Accueil</a>
-<a href="#market">Marketplace</a>
-<a href="#meteo">Météo</a>
-<a href="#geo">Localisation</a>
-<a href="#faq">FAQ</a>
-<a href="#about">Qui sommes-nous</a>
-<a href="#contact">Contact</a>
-</nav>
-
-<!-- HOME -->
-<section id="home" style="background-image:url('https://images.unsplash.com/photo-1605000797499-95a51c5269ae');">
-
-<h2>Plateforme agricole intelligente</h2>
-
-<div class="card">
-
-Hakika Agriconnect est une plateforme numérique innovante développée par COFCI (Congo First Center Innovation) qui vise à connecter les agriculteurs, les consommateurs, et les partenaires à travers un écosystème intégré.
-
-</div>
-
-</section>
-
 <!-- MARKETPLACE -->
-<section id="market" style="background-image:url('https://images.unsplash.com/photo-1464226184884-fa280b87c399');">
+<section id="market">
 
 <h2>Marketplace Agricole</h2>
 
-<button class="small-btn" onclick="toggleMarket()">Publier produit</button>
+<img src="https://images.unsplash.com/photo-1606787366850-de6330128bfc">
 
-<div id="marketForm" class="card hide">
+<input id="filter" placeholder="Rechercher produit" onkeyup="displayProducts()">
 
-<input id="prodName" placeholder="Nom produit">
-<input id="prodPrice" placeholder="Prix">
-<input type="file" id="prodImg">
+<button class="btn" onclick="openPopup()">Publier produit</button>
 
-<button onclick="addProduct()">Publier</button>
+<div id="products" class="grid"></div>
 
-</div>
+</section>
 
-<div id="products"></div>
+<!-- IA -->
+<section id="ai">
+<h2>Assistant IA Agricole</h2>
+
+<img src="https://images.unsplash.com/photo-1581091215367-59ab6f3a79f8">
+
+<div id="aiChat" class="chat"></div>
+
+<input id="aiInput" placeholder="Question agricole">
+<button class="btn" onclick="askAI()">Demander</button>
 
 </section>
 
 <!-- METEO -->
-<section id="meteo" style="background-image:url('https://images.unsplash.com/photo-1500382017468-9049fed747ef');">
+<section id="meteo">
+<h2>Météo Agricole</h2>
 
-<h2>Météo agricole</h2>
+<img src="https://images.unsplash.com/photo-1504608524841-42fe6f032b4b">
 
-<div class="card" id="meteoCard">Chargement...</div>
-
-</section>
-
-<!-- GEO -->
-<section id="geo">
-
-<h2>Localiser votre champ</h2>
-
-<button class="small-btn" onclick="geo()">Localiser</button>
-
-<p id="geoResult"></p>
-<div id="map"></div>
+<div id="weather" class="card">Chargement...</div>
 
 </section>
 
-<!-- FAQ -->
-<section id="faq">
+<!-- GPS -->
+<section id="gps">
+<h2>Localisation champ</h2>
 
-<h2>FAQ</h2>
+<img src="https://images.unsplash.com/photo-1526779259212-756e6f9e6c30">
 
-<div class="card">
-<b>Comment vendre ?</b><br>
-Publiez votre produit via marketplace.
-</div>
+<button class="btn" onclick="geo()">Localiser</button>
 
-<div class="card">
-<b>Comment acheter ?</b><br>
-Cliquez sur acheter puis contactez vendeur.
-</div>
+<p id="location"></p>
 
 </section>
 
-<!-- ABOUT -->
-<section id="about">
+<!-- POPUP -->
+<div class="popup" id="popup">
+<div class="popupBox">
 
-<h2>Qui sommes-nous</h2>
+<h3>Publier produit</h3>
 
-<div class="card">
+<input id="pName" placeholder="Nom produit">
+<input id="pPrice" placeholder="Prix">
+<input id="pPhone" placeholder="Téléphone">
+<input type="file" id="pImg">
 
-Notre mission est de faciliter la connexion entre les agriculteurs, les consommateurs et les partenaires du secteur agricole, en offrant une plateforme numérique innovante permettant un accès simplifié au marché, des informations précises et un soutien aux bonnes pratiques agricoles.
-
-</div>
-
-</section>
-
-<!-- CONTACT -->
-<section id="contact">
-
-<h2>Contact</h2>
-
-<div class="card">
-📧 contact@hakika.cd<br>
-📍 Goma RDC
-</div>
-
-</section>
-
-<!-- LOGIN -->
-<div class="popup" id="loginPopup">
-
-<h3>Connexion</h3>
-<input placeholder="Email">
-<input placeholder="Mot de passe">
-<button>Connexion</button>
-
-<h4>Créer compte</h4>
-<input placeholder="Nom">
-<input placeholder="Téléphone">
-<input placeholder="Email">
-<input placeholder="Mot de passe">
-<button>Créer</button>
-
-<button onclick="toggleLogin()">Fermer</button>
+<button class="btn" onclick="publish()">Publier</button>
+<button onclick="closePopup()">Fermer</button>
 
 </div>
+</div>
+
+<footer>
+Hakika Agriconnect — COFCI Innovation
+</footer>
 
 <script>
 
-/* LOGIN */
-function toggleLogin(){
-let pop=document.getElementById("loginPopup");
-pop.style.display=pop.style.display==="block"?"none":"block";
-}
+/* MARKETPLACE */
+let products = JSON.parse(localStorage.getItem("products")) || [];
 
-/* MARKET */
-function toggleMarket(){
-document.getElementById("marketForm").classList.toggle("hide");
-}
+function openPopup(){ popup.style.display="flex"; }
+function closePopup(){ popup.style.display="none"; }
 
-function addProduct(){
+function publish(){
 
-let name=document.getElementById("prodName").value;
-let price=document.getElementById("prodPrice").value;
-let file=document.getElementById("prodImg").files[0];
+let file = pImg.files[0];
+if(!file) return alert("Ajouter image");
 
-if(!file) return alert("Image requise");
+let reader = new FileReader();
 
-let reader=new FileReader();
+reader.onload = function(){
 
-reader.onload=function(e){
-
-let products=JSON.parse(localStorage.getItem("products")||"[]");
-
-products.push({
-name,
-price,
-img:e.target.result,
-link:window.location.href+"#product-"+Date.now()
-});
-
-localStorage.setItem("products",JSON.stringify(products));
-
-renderProducts();
+let product={
+name:pName.value,
+price:pPrice.value,
+phone:pPhone.value,
+img:reader.result
 };
+
+products.push(product);
+localStorage.setItem("products",JSON.stringify(products));
+displayProducts();
+closePopup();
+
+}
 
 reader.readAsDataURL(file);
 }
 
-function renderProducts(){
+function displayProducts(){
 
-let grid=document.getElementById("products");
-grid.innerHTML="";
+let filter=document.getElementById("filter").value.toLowerCase();
+productsDiv.innerHTML="";
 
-let products=JSON.parse(localStorage.getItem("products")||"[]");
+products
+.filter(p=>p.name.toLowerCase().includes(filter))
+.forEach((p,i)=>{
 
-products.forEach((p,i)=>{
-
-grid.innerHTML+=`
+productsDiv.innerHTML+=`
 <div class="card">
-
-<h3>${p.name}</h3>
 <img src="${p.img}">
-<p>${p.price}</p>
+<h3>${p.name}</h3>
+<p>💰 ${p.price}</p>
 
-<button onclick="shareProduct('${p.name}')">Partager</button>
-<button>Acheter</button>
-
+<button class="btn" onclick="buy('${p.phone}')">Acheter</button>
+<button class="btn" onclick="shareProduct(${i})">Partager</button>
+<button class="btn" onclick="pay('${p.phone}')">Payer Mobile Money</button>
 </div>`;
 });
 }
 
-renderProducts();
+displayProducts();
 
-/* PARTAGE */
-function shareProduct(name){
-
-if(navigator.share){
-
-navigator.share({
-title:name,
-text:"Produit disponible sur Hakika Agriconnect",
-url:window.location.href
-});
-
-}else{
-alert("Partage non supporté");
+function buy(phone){
+window.location.href="tel:"+phone;
 }
 
+/* PARTAGE */
+function shareProduct(i){
+
+let link = location.href+"?product="+i;
+
+if(navigator.share){
+navigator.share({
+title:"Produit Agricole",
+text:"Regarde ce produit",
+url:link
+});
+}else{
+navigator.clipboard.writeText(link);
+alert("Lien copié !");
+}
+}
+
+/* MOBILE MONEY SIMULATION */
+function pay(phone){
+alert("Paiement Mobile Money vers "+phone);
+}
+
+/* IA AGRICOLE */
+function askAI(){
+
+let q=aiInput.value.toLowerCase();
+let rep="Surveille humidité et sol.";
+
+if(q.includes("maïs")) rep="Planter début saison pluie.";
+if(q.includes("tomate")) rep="Sol riche + irrigation contrôlée.";
+if(q.includes("maladie")) rep="Traitement biologique recommandé.";
+
+aiChat.innerHTML+=`<p>👨‍🌾 ${q}</p>`;
+aiChat.innerHTML+=`<p>🤖 ${rep}</p>`;
 }
 
 /* GEO */
 function geo(){
-
 navigator.geolocation.getCurrentPosition(pos=>{
-
-let lat=pos.coords.latitude;
-let lon=pos.coords.longitude;
-
-document.getElementById("geoResult").innerText=
-"Latitude:"+lat+" Longitude:"+lon;
-
-document.getElementById("map").innerHTML=
-`<iframe width="100%" height="200"
-src="https://maps.google.com/maps?q=${lat},${lon}&z=15&output=embed"></iframe>`;
-
-fetchWeather(lat,lon);
-
+location.innerText =
+"Latitude: "+pos.coords.latitude+
+" Longitude: "+pos.coords.longitude;
 });
-
 }
 
 /* METEO */
-async function fetchWeather(lat,lon){
+async function loadWeather(){
 
 try{
-let res=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`);
-
+let res=await fetch("https://api.open-meteo.com/v1/forecast?latitude=-1.68&longitude=29.22&current_weather=true");
 let data=await res.json();
 
-document.getElementById("meteoCard").innerHTML=
-`🌡 ${data.current_weather.temperature}°C<br>
+weather.innerHTML=
+`🌡 ${data.current_weather.temperature}°C 
 💨 Vent ${data.current_weather.windspeed} km/h`;
 
 }catch{
-document.getElementById("meteoCard").innerText="Erreur météo";
+weather.innerHTML="Erreur météo";
+}
 }
 
-}
+loadWeather();
 
-/* AUTO METEO */
-geo();
+/* PWA INSTALL */
+if('serviceWorker' in navigator){
+navigator.serviceWorker.register('sw.js');
+}
 
 </script>
 
