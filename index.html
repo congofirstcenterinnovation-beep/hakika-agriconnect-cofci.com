@@ -3,17 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Hakika Agriconnect Premium</title>
-
-<link rel="manifest" href="manifest.json">
+<title>AgriConnect Africa</title>
 
 <style>
 body{
-font-family:Poppins,Arial;
+font-family: Arial, sans-serif;
 margin:0;
-background:#f3f7f3;
-scroll-behavior:smooth;
+background:#f4f6f8;
 }
 
 /* HEADER */
@@ -22,257 +18,244 @@ background:#2E7D32;
 color:white;
 padding:15px;
 text-align:center;
-position:sticky;
-top:0;
-z-index:1000;
-box-shadow:0 2px 8px rgba(0,0,0,0.2);
+font-weight:bold;
 }
 
 nav{
 display:flex;
 justify-content:center;
-gap:8px;
+gap:10px;
 flex-wrap:wrap;
-margin-top:8px;
+background:#1B5E20;
+padding:10px;
 }
 
-nav a{
+nav button{
 background:white;
-padding:6px 12px;
-border-radius:20px;
-text-decoration:none;
-color:#2E7D32;
-font-size:12px;
-}
-
-/* SECTION */
-section{
-padding:35px 15px;
-max-width:900px;
-margin:auto;
-}
-
-h2{
-text-align:center;
-color:#2E7D32;
-}
-
-/* BUTTON */
-.btn{
-background:#2E7D32;
-color:white;
 border:none;
-padding:8px 16px;
-border-radius:25px;
+padding:8px 14px;
+border-radius:20px;
 cursor:pointer;
-margin-top:10px;
 font-size:13px;
 }
 
-/* CARD */
-.card{
+/* SECTIONS */
+section{
+display:none;
+padding:20px;
+}
+
+.active{
+display:block;
+}
+
+/* HERO */
+.hero{
+text-align:center;
+padding:30px;
+}
+
+.hero img{
+width:100%;
+max-width:350px;
+border-radius:10px;
+}
+
+/* BUTTON */
+.actionBtn{
+background:#2E7D32;
+color:white;
+border:none;
+padding:10px 18px;
+border-radius:25px;
+cursor:pointer;
+font-size:14px;
+margin-top:10px;
+}
+
+/* PRODUITS */
+.product{
 background:white;
-padding:14px;
-border-radius:12px;
-margin-top:15px;
-box-shadow:0 2px 6px rgba(0,0,0,0.15);
+padding:15px;
+margin-top:10px;
+border-radius:10px;
+box-shadow:0 2px 6px rgba(0,0,0,0.1);
 }
 
-img{
+.product img{
 width:100%;
-border-radius:12px;
+border-radius:10px;
 }
 
-/* MARKET */
-.grid{
-display:grid;
-gap:12px;
-}
-
-input,select{
-width:100%;
-padding:8px;
-margin-top:6px;
-border-radius:8px;
-border:1px solid #ccc;
-}
-
-/* POPUP */
+/* FORM POPUP */
 .popup{
 position:fixed;
 top:0;
 left:0;
 width:100%;
 height:100%;
-background:rgba(0,0,0,0.6);
+background:rgba(0,0,0,0.5);
 display:none;
 justify-content:center;
 align-items:center;
 }
 
-.popupBox{
+.popupContent{
 background:white;
 padding:20px;
-border-radius:12px;
+border-radius:10px;
 width:90%;
 max-width:350px;
 }
 
+input, textarea{
+width:100%;
+padding:8px;
+margin-top:8px;
+border-radius:8px;
+border:1px solid #ccc;
+}
+
 /* CHAT */
-.chat{
-height:220px;
+.chatBox{
+height:250px;
 overflow-y:auto;
-background:#eef7ee;
+background:white;
 padding:10px;
 border-radius:10px;
 }
 
-footer{
-background:#1B5E20;
-color:white;
-text-align:center;
-padding:20px;
-margin-top:40px;
-}
 </style>
 </head>
 
 <body>
 
-<header>
-🌍 Connecter les agriculteurs africains au marché réel
+<header>🌍 Connecter les agriculteurs africains au marché réel</header>
+
 <nav>
-<a href="#market">Marketplace</a>
-<a href="#ai">IA</a>
-<a href="#meteo">Météo</a>
-<a href="#gps">Localisation</a>
+<button onclick="show('home')">Accueil</button>
+<button onclick="show('market')">Marketplace</button>
+<button onclick="show('ai')">Assistant IA</button>
+<button onclick="show('meteo')">Météo</button>
+<button onclick="show('gps')">Localisation</button>
 </nav>
-</header>
+
+<!-- ACCUEIL -->
+<section id="home" class="active">
+<div class="hero">
+<img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef">
+<h2>Vendez vos récoltes directement</h2>
+<p>Plateforme digitale pour agriculteurs africains.</p>
+</div>
+</section>
 
 <!-- MARKETPLACE -->
 <section id="market">
-
 <h2>Marketplace Agricole</h2>
 
-<img src="https://images.unsplash.com/photo-1606787366850-de6330128bfc">
+<button class="actionBtn" onclick="openPopup()">Publier vos produits ici</button>
 
-<input id="filter" placeholder="Rechercher produit" onkeyup="displayProducts()">
-
-<button class="btn" onclick="openPopup()">Publier produit</button>
-
-<div id="products" class="grid"></div>
-
+<div id="products"></div>
 </section>
 
 <!-- IA -->
 <section id="ai">
-<h2>Assistant IA Agricole</h2>
-
-<img src="https://images.unsplash.com/photo-1581091215367-59ab6f3a79f8">
-
-<div id="aiChat" class="chat"></div>
-
-<input id="aiInput" placeholder="Question agricole">
-<button class="btn" onclick="askAI()">Demander</button>
-
+<h2>Assistant Agricole IA</h2>
+<div class="chatBox" id="aiChat"></div>
+<input id="aiInput" placeholder="Pose ta question agricole">
+<button class="actionBtn" onclick="askAI()">Envoyer</button>
 </section>
 
 <!-- METEO -->
 <section id="meteo">
 <h2>Météo Agricole</h2>
-
-<img src="https://images.unsplash.com/photo-1504608524841-42fe6f032b4b">
-
-<div id="weather" class="card">Chargement...</div>
-
+<div id="weather"></div>
 </section>
 
 <!-- GPS -->
 <section id="gps">
-<h2>Localisation champ</h2>
-
-<img src="https://images.unsplash.com/photo-1526779259212-756e6f9e6c30">
-
-<button class="btn" onclick="geo()">Localiser</button>
-
+<h2>Localiser mon champ</h2>
+<button class="actionBtn" onclick="getLocation()">Obtenir localisation</button>
 <p id="location"></p>
-
 </section>
 
-<!-- POPUP -->
+<!-- POPUP FORM -->
 <div class="popup" id="popup">
-<div class="popupBox">
-
-<h3>Publier produit</h3>
+<div class="popupContent">
+<h3>Publier Produit</h3>
 
 <input id="pName" placeholder="Nom produit">
 <input id="pPrice" placeholder="Prix">
-<input id="pPhone" placeholder="Téléphone">
+<input id="pPhone" placeholder="Numéro">
 <input type="file" id="pImg">
 
-<button class="btn" onclick="publish()">Publier</button>
+<button class="actionBtn" onclick="publish()">Publier</button>
 <button onclick="closePopup()">Fermer</button>
-
 </div>
 </div>
-
-<footer>
-Hakika Agriconnect — COFCI Innovation
-</footer>
 
 <script>
+
+/* NAV */
+function show(id){
+document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
+document.getElementById(id).classList.add("active");
+}
+
+/* POPUP */
+function openPopup(){ document.getElementById("popup").style.display="flex"; }
+function closePopup(){ document.getElementById("popup").style.display="none"; }
 
 /* MARKETPLACE */
 let products = JSON.parse(localStorage.getItem("products")) || [];
 
-function openPopup(){ popup.style.display="flex"; }
-function closePopup(){ popup.style.display="none"; }
-
 function publish(){
 
+let name = pName.value;
+let price = pPrice.value;
+let phone = pPhone.value;
 let file = pImg.files[0];
-if(!file) return alert("Ajouter image");
+
+if(!file) return alert("Ajoute image");
 
 let reader = new FileReader();
 
 reader.onload = function(){
-
-let product={
-name:pName.value,
-price:pPrice.value,
-phone:pPhone.value,
+let product = {
+name,
+price,
+phone,
 img:reader.result
 };
 
 products.push(product);
-localStorage.setItem("products",JSON.stringify(products));
+localStorage.setItem("products", JSON.stringify(products));
+
 displayProducts();
 closePopup();
-
-}
+};
 
 reader.readAsDataURL(file);
 }
 
 function displayProducts(){
+let container = document.getElementById("products");
+container.innerHTML="";
 
-let filter=document.getElementById("filter").value.toLowerCase();
-productsDiv.innerHTML="";
+products.forEach((p,i)=>{
 
-products
-.filter(p=>p.name.toLowerCase().includes(filter))
-.forEach((p,i)=>{
-
-productsDiv.innerHTML+=`
-<div class="card">
+container.innerHTML+=`
+<div class="product">
 <img src="${p.img}">
 <h3>${p.name}</h3>
 <p>💰 ${p.price}</p>
+<p>📞 ${p.phone}</p>
 
-<button class="btn" onclick="buy('${p.phone}')">Acheter</button>
-<button class="btn" onclick="shareProduct(${i})">Partager</button>
-<button class="btn" onclick="pay('${p.phone}')">Payer Mobile Money</button>
-</div>`;
+<button class="actionBtn" onclick="buy('${p.phone}')">Acheter</button>
+<button onclick="share(${i})">Partager</button>
+
+</div>
+`;
 });
 }
 
@@ -282,72 +265,46 @@ function buy(phone){
 window.location.href="tel:"+phone;
 }
 
-/* PARTAGE */
-function shareProduct(i){
-
-let link = location.href+"?product="+i;
-
-if(navigator.share){
-navigator.share({
-title:"Produit Agricole",
-text:"Regarde ce produit",
-url:link
-});
-}else{
+function share(i){
+let link = location.href+"#product"+i;
 navigator.clipboard.writeText(link);
 alert("Lien copié !");
-}
-}
-
-/* MOBILE MONEY SIMULATION */
-function pay(phone){
-alert("Paiement Mobile Money vers "+phone);
 }
 
 /* IA AGRICOLE */
 function askAI(){
+let input = aiInput.value.toLowerCase();
+let chat = document.getElementById("aiChat");
 
-let q=aiInput.value.toLowerCase();
-let rep="Surveille humidité et sol.";
+let rep="";
 
-if(q.includes("maïs")) rep="Planter début saison pluie.";
-if(q.includes("tomate")) rep="Sol riche + irrigation contrôlée.";
-if(q.includes("maladie")) rep="Traitement biologique recommandé.";
+if(input.includes("engrais"))
+rep="Utilisez compost organique ou NPK équilibré.";
 
-aiChat.innerHTML+=`<p>👨‍🌾 ${q}</p>`;
-aiChat.innerHTML+=`<p>🤖 ${rep}</p>`;
-}
+else if(input.includes("pluie"))
+rep="Planifiez semis avant saison pluvieuse.";
 
-/* GEO */
-function geo(){
-navigator.geolocation.getCurrentPosition(pos=>{
-location.innerText =
-"Latitude: "+pos.coords.latitude+
-" Longitude: "+pos.coords.longitude;
-});
+else
+rep="Je conseille rotation cultures et analyse sol.";
+
+chat.innerHTML+=`<p><b>Vous:</b> ${input}</p>`;
+chat.innerHTML+=`<p><b>IA:</b> ${rep}</p>`;
 }
 
 /* METEO */
 async function loadWeather(){
+let res = await fetch("https://api.openweathermap.org/data/2.5/weather?q=Goma&appid=YOUR_API_KEY&units=metric");
+let data = await res.json();
 
-try{
-let res=await fetch("https://api.open-meteo.com/v1/forecast?latitude=-1.68&longitude=29.22&current_weather=true");
-let data=await res.json();
-
-weather.innerHTML=
-`🌡 ${data.current_weather.temperature}°C 
-💨 Vent ${data.current_weather.windspeed} km/h`;
-
-}catch{
-weather.innerHTML="Erreur météo";
+weather.innerHTML=`🌤 ${data.main.temp}°C - ${data.weather[0].description}`;
 }
-}
-
 loadWeather();
 
-/* PWA INSTALL */
-if('serviceWorker' in navigator){
-navigator.serviceWorker.register('sw.js');
+/* GPS */
+function getLocation(){
+navigator.geolocation.getCurrentPosition(pos=>{
+location.innerText=`Latitude: ${pos.coords.latitude} Longitude: ${pos.coords.longitude}`;
+});
 }
 
 </script>
