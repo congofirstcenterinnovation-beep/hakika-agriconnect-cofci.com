@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hakika AgriConnect Africa</title>
+<title>AgriConnect Africa</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
 body{font-family:'Poppins',sans-serif;margin:0;background:#f4f6f8;color:#1b5e20;scroll-behavior:smooth;}
@@ -34,7 +34,7 @@ img.sectionImg{width:100%;border-radius:12px;margin-top:15px;box-shadow:0 2px 4p
 <body>
 
 <header>
-🌍 Hakika Agriconnect  Congo First Center Innovation
+🌍 Connecter les agriculteurs africains au marché réel
 <button onclick="toggleLogin()">Connexion / Inscription</button>
 </header>
 
@@ -129,8 +129,8 @@ img.sectionImg{width:100%;border-radius:12px;margin-top:15px;box-shadow:0 2px 4p
 <section id="contact" style="background-image:url('https://images.unsplash.com/photo-1504384308090-c894fdcc538d');">
 <h2>Contactez-nous</h2>
 <div class="card">
-<p>Email : contact@hakika.cd,contactcofci@gmail.com</p>
-<p>Adresse : Katindo,Goma,province du nord kivu en RDC</p>
+<p>Email : contact@hakika.cd</p>
+<p>Adresse : Goma, RDC</p>
 </div>
 </section>
 
@@ -228,20 +228,96 @@ chat.innerHTML+=`<p><b>Vous:</b> ${input}</p><p><b>IA:</b> ${rep}</p>`;
 chat.scrollTop=chat.scrollHeight;
 }
 
-/* METEO & GPS */
-function getLocation(){
-navigator.geolocation.getCurrentPosition(async pos=>{
-let lat=pos.coords.latitude, lon=pos.coords.longitude;
-document.getElementById("location").innerText=`Latitude: ${lat} Longitude: ${lon}`;
+/* ===== METEO + LOCALISATION PROFESSIONNEL ===== */
+
+async function loadWeather(lat, lon){
+
 try{
-let res = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`);
+
+let res = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=a5c54e882dfe6ea680cb7ec514fa88bd&units=metric&lang=fr`);
+
 let data = await res.json();
-document.getElementById("weatherGPS").innerHTML=`🌡 Temp: ${data.main.temp}°C<br>💨 Vent: ${data.wind.speed} m/s<br>💧 Humidité: ${data.main.humidity}%<br>🌤 ${data.weather[0].description}`;
-document.getElementById("weather").innerHTML=`🌡 Temp: ${data.main.temp}°C<br>💨 Vent: ${data.wind.speed} m/s<br>💧 Humidité: ${data.main.humidity}%<br>🌤 ${data.weather[0].description}`;
-}catch{document.getElementById("weatherGPS").innerText="Météo indisponible";}
-});
+
+/* Conseils agricoles intelligents */
+let conseil="Conditions normales pour agriculture.";
+if(data.main.humidity > 80) conseil="⚠ Forte humidité : surveiller maladies fongiques.";
+if(data.wind.speed > 8) conseil="⚠ Vent fort : protéger cultures fragiles.";
+if(data.main.temp > 32) conseil="⚠ Forte chaleur : arroser tôt matin ou soir.";
+
+/* Affichage météo principal */
+let weatherHTML = `
+🌍 Ville : ${data.name} <br>
+🌡 Température : ${data.main.temp} °C <br>
+💨 Vent : ${data.wind.speed} m/s <br>
+💧 Humidité : ${data.main.humidity}% <br>
+🌦 Description : ${data.weather[0].description} <br>
+🌱 Conseil agricole : ${conseil}
+`;
+
+document.getElementById("weather").innerHTML = weatherHTML;
+document.getElementById("weatherGPS").innerHTML = weatherHTML;
+
+}catch(error){
+
+document.getElementById("weather").innerHTML="Impossible de charger météo";
+document.getElementById("weatherGPS").innerHTML="Impossible de charger météo";
+
 }
 
+}
+
+/* ===== GPS ===== */
+
+function getLocation(){
+
+if(!navigator.geolocation){
+
+alert("Géolocalisation non supportée");
+return;
+
+}
+
+navigator.geolocation.getCurrentPosition(
+
+pos => {
+
+let lat = pos.coords.latitude;
+let lon = pos.coords.longitude;
+
+document.getElementById("location").innerText =
+`📍 Latitude : ${lat.toFixed(4)} | Longitude : ${lon.toFixed(4)}`;
+
+loadWeather(lat, lon);
+
+},
+
+err => {
+
+alert("Autorisez la localisation pour voir la météo");
+
+}
+
+);
+
+}
+
+/* Charger météo automatiquement quand page météo ouverte */
+function autoWeather(){
+
+if(navigator.geolocation){
+
+navigator.geolocation.getCurrentPosition(pos => {
+
+loadWeather(pos.coords.latitude, pos.coords.longitude);
+
+});
+
+}
+
+}
+
+/* Lancer auto météo */
+window.onload = autoWeather;
 /* SCROLL FADE-IN */
 window.addEventListener("scroll",()=>{document.querySelectorAll("section").forEach(sec=>{let top=sec.getBoundingClientRect().top,h=window.innerHeight;if(top<h-100){sec.classList.add("active");}});});
 
