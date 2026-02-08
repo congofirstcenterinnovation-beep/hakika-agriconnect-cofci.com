@@ -229,108 +229,116 @@ chat.scrollTop=chat.scrollHeight;
 }
 
 /* ===== METEO + LOCALISATION PROFESSIONNEL ===== */
+/* ===== GPS + METEO COMPLET ===== */
 
-async function loadWeather(lat, lon){
+const API_KEY = "618601d9a107d1798c46d59b2701c760";
+
+/* DETECTION LOCALISATION + METEO */
+function detectLocationAndWeather(){
+
+if(!navigator.geolocation){
+loadDefaultWeather();
+return;
+}
+
+navigator.geolocation.getCurrentPosition(
+
+/* SUCCESS */
+function(position){
+
+let lat = position.coords.latitude;
+let lon = position.coords.longitude;
+
+document.getElementById("location").innerText =
+"📍 Latitude : "+lat.toFixed(4)+" | Longitude : "+lon.toFixed(4);
+
+loadWeather(lat,lon);
+},
+
+/* ERROR */
+function(error){
+
+alert("Localisation refusée ou indisponible. Météo régionale affichée.");
+
+loadDefaultWeather();
+},
+
+{
+enableHighAccuracy:true,
+timeout:10000,
+maximumAge:0
+}
+
+);
+
+}
+
+
+/* METEO AVEC GPS */
+async function loadWeather(lat,lon){
 
 try{
 
-let res = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=a5c54e882dfe6ea680cb7ec514fa88bd&units=metric&lang=fr`);
+let url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric&lang=fr`;
 
+let res = await fetch(url);
 let data = await res.json();
 
-/* Conseils agricoles intelligents */
 let conseil="Conditions normales pour agriculture.";
 if(data.main.humidity > 80) conseil="⚠ Forte humidité : surveiller maladies fongiques.";
 if(data.wind.speed > 8) conseil="⚠ Vent fort : protéger cultures fragiles.";
 if(data.main.temp > 32) conseil="⚠ Forte chaleur : arroser tôt matin ou soir.";
 
-/* Affichage météo principal */
-let weatherHTML = `
-🌍 Ville : ${data.name} <br>
-🌡 Température : ${data.main.temp} °C <br>
-💨 Vent : ${data.wind.speed} m/s <br>
-💧 Humidité : ${data.main.humidity}% <br>
-🌦 Description : ${data.weather[0].description} <br>
+let html = `
+🌍 Ville : ${data.name}<br>
+🌡 Température : ${data.main.temp} °C<br>
+💨 Vent : ${data.wind.speed} m/s<br>
+💧 Humidité : ${data.main.humidity}%<br>
+🌦 Description : ${data.weather[0].description}<br>
 🌱 Conseil agricole : ${conseil}
 `;
 
-document.getElementById("weather").innerHTML = weatherHTML;
-document.getElementById("weatherGPS").innerHTML = weatherHTML;
+document.getElementById("weather").innerHTML = html;
+document.getElementById("weatherGPS").innerHTML = html;
 
-}catch(error){
+}catch{
 
-document.getElementById("weather").innerHTML="Impossible de charger météo";
-document.getElementById("weatherGPS").innerHTML="Impossible de charger météo";
-
+loadDefaultWeather();
 }
 
 }
 
-/* ===== GPS ===== */
 
-function getLocation(){
+/* METEO PAR DEFAUT */
+async function loadDefaultWeather(){
 
-if(!navigator.geolocation){
+try{
 
-alert("GPS non supporté sur cet appareil");
-loadWeather(-1.6792, 29.2228); // fallback Goma
-return;
-
-}
-
-navigator.geolocation.getCurrentPosition(
-
-pos => {
-
-let lat = pos.coords.latitude;
-let lon = pos.coords.longitude;
-
-document.getElementById("location").innerText =
-`📍 Latitude : ${lat.toFixed(4)} | Longitude : ${lon.toFixed(4)}`;
-
-loadWeather(lat, lon);
-
-},
-
-error => {
-
-alert("Localisation refusée → météo par défaut affichée");
-loadWeather(-1.6792, 29.2228);
-
-}
-
+let res = await fetch(
+`https://api.openweathermap.org/data/2.5/weather?q=Goma&appid=${API_KEY}&units=metric&lang=fr`
 );
 
-}
+let data = await res.json();
 
+let html = `
+🌍 Météo régionale : Goma<br>
+🌡 Température : ${data.main.temp} °C<br>
+🌦 Description : ${data.weather[0].description}
+`;
 
-/* AUTO METEO AU DEMARRAGE */
-function autoWeather(){
+document.getElementById("weather").innerHTML = html;
+document.getElementById("weatherGPS").innerHTML = html;
 
-if(navigator.geolocation){
+}catch{
 
-navigator.geolocation.getCurrentPosition(
-
-pos => {
-loadWeather(pos.coords.latitude, pos.coords.longitude);
-},
-
-error => {
-loadWeather(-1.6792, 29.2228); // fallback si refus
-}
-
-);
-
-}else{
-
-loadWeather(-1.6792, 29.2228);
-
+document.getElementById("weather").innerHTML="Impossible charger météo";
 }
 
 }
 
-/* Lancer auto météo */
-window.onload = autoWeather;
+
+/* LANCEMENT AUTO */
+window.onload = detectLocationAndWeather;
 /* SCROLL FADE-IN */
 window.addEventListener("scroll",()=>{document.querySelectorAll("section").forEach(sec=>{let top=sec.getBoundingClientRect().top,h=window.innerHeight;if(top<h-100){sec.classList.add("active");}});});
 
