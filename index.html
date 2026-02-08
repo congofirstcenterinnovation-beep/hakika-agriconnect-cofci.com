@@ -7,17 +7,18 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
 body{font-family:'Poppins',sans-serif;margin:0;background:#f4f6f8;color:#1b5e20;scroll-behavior:smooth;}
-header{background:#2E7D32;color:white;padding:15px;text-align:center;font-weight:bold;font-size:1.2rem;position:sticky;top:0;z-index:1000;}
+header{background:#2E7D32;color:white;padding:15px;text-align:center;font-weight:bold;font-size:1.2rem;position:sticky;top:0;z-index:1000;text-shadow:1px 1px 2px #000;}
 nav{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;background:#1B5E20;padding:8px;position:sticky;top:60px;z-index:900;}
-nav button{background:white;border:none;padding:6px 12px;border-radius:20px;cursor:pointer;font-size:13px;transition:0.2s;}
-nav button:hover{background:#d9d9d9;}
-section{display:none;padding:40px 20px;min-height:80vh;text-align:center;background-size:cover;background-position:center;position:relative;color:#fff;}
-.active{display:block;}
+nav button{background:white;border:none;padding:6px 12px;border-radius:20px;cursor:pointer;font-size:13px;transition:0.3s;box-shadow:0 2px 5px rgba(0,0,0,0.2);}
+nav button:hover{background:#d9d9d9;transform:scale(1.05);}
+section{opacity:0;transform:translateY(50px);transition:all 0.8s ease;display:none;padding:40px 20px;min-height:80vh;text-align:center;background-size:cover;background-position:center;position:relative;color:#fff;}
+section.active{display:block;opacity:1;transform:translateY(0);}
 .hero{background:rgba(0,0,0,0.4);padding:30px;border-radius:12px;display:inline-block;}
-.hero img{width:100%;max-width:350px;border-radius:12px;margin-bottom:15px;}
-.actionBtn{background:#2E7D32;color:white;border:none;padding:8px 16px;border-radius:20px;cursor:pointer;font-size:14px;margin-top:10px;transition:0.2s;}
-.actionBtn:hover{background:#1b5e20;}
-.product{background:white;padding:15px;margin-top:10px;border-radius:12px;box-shadow:0 3px 6px rgba(0,0,0,0.2);color:#000;}
+.hero img{width:100%;max-width:350px;border-radius:12px;margin-bottom:15px;box-shadow:0 4px 8px rgba(0,0,0,0.4);}
+.actionBtn{background:#2E7D32;color:white;border:none;padding:8px 16px;border-radius:20px;cursor:pointer;font-size:14px;margin-top:10px;transition:0.3s;box-shadow:0 0 8px #2E7D32;}
+.actionBtn:hover{background:#1b5e20;box-shadow:0 0 12px #1b5e20;transform:scale(1.05);}
+.product{background:white;padding:15px;margin-top:10px;border-radius:12px;box-shadow:0 3px 8px rgba(0,0,0,0.3);color:#000;transition:0.3s;}
+.product:hover{box-shadow:0 0 15px #2E7D32;transform:scale(1.02);}
 .product img{width:100%;border-radius:12px;margin-bottom:8px;}
 .popup{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);display:none;justify-content:center;align-items:center;z-index:2000;}
 .popupContent{background:white;padding:20px;border-radius:12px;width:90%;max-width:350px;}
@@ -146,6 +147,8 @@ const API_KEY = "618601d9a107d1798c46d59b2701c760";
 
 /* NAVIGATION */
 function show(id){document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));document.getElementById(id).classList.add("active");}
+
+/* POPUP */
 function openPopup(){document.getElementById("popup").style.display="flex";}
 function closePopup(){document.getElementById("popup").style.display="none";}
 
@@ -194,7 +197,7 @@ chat.innerHTML+=`<p><b>Vous:</b> ${input}</p><p><b>IA:</b> ${rep}</p>`;
 chat.scrollTop=chat.scrollHeight;
 }
 
-/* METEO GPS */
+/* METEO & GPS */
 function getLocation(){
 navigator.geolocation.getCurrentPosition(async pos=>{
 let lat=pos.coords.latitude, lon=pos.coords.longitude;
@@ -202,11 +205,19 @@ document.getElementById("location").innerText=`Latitude: ${lat} Longitude: ${lon
 try{
 let res = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`);
 let data = await res.json();
-document.getElementById("weatherGPS").innerHTML=`🌤 ${data.main.temp}°C - ${data.weather[0].description}`;
-document.getElementById("weather").innerHTML=`🌤 ${data.main.temp}°C - ${data.weather[0].description}`;
+document.getElementById("weatherGPS").innerHTML=`🌡 Temp: ${data.main.temp}°C<br>💨 Vent: ${data.wind.speed} m/s<br>💧 Humidité: ${data.main.humidity}%<br>🌤 ${data.weather[0].description}`;
+document.getElementById("weather").innerHTML=`🌡 Temp: ${data.main.temp}°C<br>💨 Vent: ${data.wind.speed} m/s<br>💧 Humidité: ${data.main.humidity}%<br>🌤 ${data.weather[0].description}`;
 }catch{document.getElementById("weatherGPS").innerText="Météo indisponible";}
 });
 }
+
+/* SCROLL FADE-IN */
+window.addEventListener("scroll",()=>{
+document.querySelectorAll("section").forEach(sec=>{
+let top=sec.getBoundingClientRect().top, h=window.innerHeight;
+if(top<h-100){sec.classList.add("active");}
+});
+});
 </script>
 
 </body>
