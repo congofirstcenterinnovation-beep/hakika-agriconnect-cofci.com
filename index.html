@@ -4,130 +4,30 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AgriConnect Africa</title>
-
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
-body{
-font-family: Arial, sans-serif;
-margin:0;
-background:#f4f6f8;
-}
-
-/* HEADER */
-header{
-background:#2E7D32;
-color:white;
-padding:15px;
-text-align:center;
-font-weight:bold;
-}
-
-nav{
-display:flex;
-justify-content:center;
-gap:10px;
-flex-wrap:wrap;
-background:#1B5E20;
-padding:10px;
-}
-
-nav button{
-background:white;
-border:none;
-padding:8px 14px;
-border-radius:20px;
-cursor:pointer;
-font-size:13px;
-}
-
-/* SECTIONS */
-section{
-display:none;
-padding:20px;
-}
-
-.active{
-display:block;
-}
-
-/* HERO */
-.hero{
-text-align:center;
-padding:30px;
-}
-
-.hero img{
-width:100%;
-max-width:350px;
-border-radius:10px;
-}
-
-/* BUTTON */
-.actionBtn{
-background:#2E7D32;
-color:white;
-border:none;
-padding:10px 18px;
-border-radius:25px;
-cursor:pointer;
-font-size:14px;
-margin-top:10px;
-}
-
-/* PRODUITS */
-.product{
-background:white;
-padding:15px;
-margin-top:10px;
-border-radius:10px;
-box-shadow:0 2px 6px rgba(0,0,0,0.1);
-}
-
-.product img{
-width:100%;
-border-radius:10px;
-}
-
-/* FORM POPUP */
-.popup{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:rgba(0,0,0,0.5);
-display:none;
-justify-content:center;
-align-items:center;
-}
-
-.popupContent{
-background:white;
-padding:20px;
-border-radius:10px;
-width:90%;
-max-width:350px;
-}
-
-input, textarea{
-width:100%;
-padding:8px;
-margin-top:8px;
-border-radius:8px;
-border:1px solid #ccc;
-}
-
-/* CHAT */
-.chatBox{
-height:250px;
-overflow-y:auto;
-background:white;
-padding:10px;
-border-radius:10px;
-}
-
+body{font-family:'Poppins',sans-serif;margin:0;background:#f4f6f8;color:#1b5e20;scroll-behavior:smooth;}
+header{background:#2E7D32;color:white;padding:15px;text-align:center;font-weight:bold;font-size:1.2rem;position:sticky;top:0;z-index:1000;}
+nav{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;background:#1B5E20;padding:8px;position:sticky;top:60px;z-index:900;}
+nav button{background:white;border:none;padding:6px 12px;border-radius:20px;cursor:pointer;font-size:13px;transition:0.2s;}
+nav button:hover{background:#d9d9d9;}
+section{display:none;padding:40px 20px;min-height:80vh;text-align:center;background-size:cover;background-position:center;position:relative;color:#fff;}
+.active{display:block;}
+.hero{background:rgba(0,0,0,0.4);padding:30px;border-radius:12px;display:inline-block;}
+.hero img{width:100%;max-width:350px;border-radius:12px;margin-bottom:15px;}
+.actionBtn{background:#2E7D32;color:white;border:none;padding:8px 16px;border-radius:20px;cursor:pointer;font-size:14px;margin-top:10px;transition:0.2s;}
+.actionBtn:hover{background:#1b5e20;}
+.product{background:white;padding:15px;margin-top:10px;border-radius:12px;box-shadow:0 3px 6px rgba(0,0,0,0.2);color:#000;}
+.product img{width:100%;border-radius:12px;margin-bottom:8px;}
+.popup{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);display:none;justify-content:center;align-items:center;z-index:2000;}
+.popupContent{background:white;padding:20px;border-radius:12px;width:90%;max-width:350px;}
+input,textarea{width:100%;padding:8px;margin-top:8px;border-radius:8px;border:1px solid #ccc;}
+.chatBox{height:200px;overflow-y:auto;background:white;padding:10px;border-radius:12px;margin-bottom:10px;color:#000;}
+h2{margin-bottom:15px;text-shadow:1px 1px 2px #000;}
+img.sectionImg{width:100%;border-radius:12px;margin-top:15px;box-shadow:0 2px 4px rgba(0,0,0,0.3);}
+.card{background:rgba(255,255,255,0.9);color:#000;padding:15px;border-radius:12px;margin-bottom:15px;box-shadow:0 2px 6px rgba(0,0,0,0.2);}
 </style>
 </head>
-
 <body>
 
 <header>🌍 Connecter les agriculteurs africains au marché réel</header>
@@ -138,28 +38,30 @@ border-radius:10px;
 <button onclick="show('ai')">Assistant IA</button>
 <button onclick="show('meteo')">Météo</button>
 <button onclick="show('gps')">Localisation</button>
+<button onclick="show('about')">Qui sommes-nous</button>
+<button onclick="show('faq')">FAQ</button>
+<button onclick="show('privacy')">Confidentialité</button>
+<button onclick="show('contact')">Contact</button>
 </nav>
 
 <!-- ACCUEIL -->
-<section id="home" class="active">
+<section id="home" class="active" style="background-image:url('https://images.unsplash.com/photo-1592982537447-6d96e902ef4c');">
 <div class="hero">
 <img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef">
-<h2>Vendez vos récoltes directement</h2>
-<p>Plateforme digitale pour agriculteurs africains.</p>
+<h2>Connecter les agriculteurs africains au marché réel</h2>
+<p>Plateforme digitale innovante pour vendre, apprendre et se connecter facilement.</p>
 </div>
 </section>
 
 <!-- MARKETPLACE -->
-<section id="market">
+<section id="market" style="background-image:url('https://images.unsplash.com/photo-1464226184884-fa280b87c399');">
 <h2>Marketplace Agricole</h2>
-
 <button class="actionBtn" onclick="openPopup()">Publier vos produits ici</button>
-
 <div id="products"></div>
 </section>
 
 <!-- IA -->
-<section id="ai">
+<section id="ai" style="background-image:url('https://images.unsplash.com/photo-1523362628745-0c100150b7d3');">
 <h2>Assistant Agricole IA</h2>
 <div class="chatBox" id="aiChat"></div>
 <input id="aiInput" placeholder="Pose ta question agricole">
@@ -167,146 +69,144 @@ border-radius:10px;
 </section>
 
 <!-- METEO -->
-<section id="meteo">
+<section id="meteo" style="background-image:url('https://images.unsplash.com/photo-1504384308090-c894fdcc538d');">
 <h2>Météo Agricole</h2>
-<div id="weather"></div>
+<div class="card" id="weather">Chargement...</div>
 </section>
 
 <!-- GPS -->
-<section id="gps">
+<section id="gps" style="background-image:url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee');">
 <h2>Localiser mon champ</h2>
 <button class="actionBtn" onclick="getLocation()">Obtenir localisation</button>
 <p id="location"></p>
+<div class="card" id="weatherGPS"></div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" style="background-image:url('https://images.unsplash.com/photo-1574943320219-553eb213f72d');">
+<h2>Qui sommes-nous</h2>
+<div class="card">
+<p><strong>Hakika Agriconnect</strong> est une plateforme numérique innovante développée par <strong>COFCI</strong> pour connecter agriculteurs, consommateurs et partenaires via un écosystème intégré.</p>
+<p>Notre mission est de faciliter l’accès au marché, fournir des informations agricoles fiables, promouvoir des produits bio et améliorer la sécurité alimentaire en RDC. Nous aidons les producteurs à valoriser chaque récolte et à renforcer la durabilité de leur activité.</p>
+<p>Nous combinons technologie et intelligence artificielle pour offrir conseils agricoles, analyses météo et support en temps réel, créant ainsi une communauté solide et productive.</p>
+<p style="font-weight:bold;color:#2E7D32;">Rejoignez-nous pour transformer l’agriculture africaine avec impact et innovation.</p>
+<img class="sectionImg" src="https://images.unsplash.com/photo-1550258987-190a2d41a8ba">
+</div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" style="background-image:url('https://images.unsplash.com/photo-1528825871115-3581a5387919');">
+<h2>FAQ</h2>
+<div class="card">
+<h3>Comment publier mes produits ?</h3>
+<p>Cliquez sur "Publier vos produits ici" dans Marketplace et remplissez le formulaire.</p>
+</div>
+<div class="card">
+<h3>Comment contacter l'équipe ?</h3>
+<p>Par email à contact@hakika.cd ou via la section Contact.</p>
+</div>
+<div class="card">
+<h3>Moyens de paiement acceptés</h3>
+<p>Orange Money, Airtel Money et Vodacom Money.</p>
+</div>
+</section>
+
+<!-- PRIVACY -->
+<section id="privacy" style="background-image:url('https://images.unsplash.com/photo-1507679799987-c73779587ccf');">
+<h2>Confidentialité</h2>
+<div class="card">
+<p>Les données collectées sont utilisées uniquement pour sécuriser les transactions et améliorer l’expérience utilisateur. Nous ne partageons jamais vos informations personnelles sans consentement.</p>
+</div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" style="background-image:url('https://images.unsplash.com/photo-1504384308090-c894fdcc538d');">
+<h2>Contactez-nous</h2>
+<div class="card">
+<p>Email : contact@hakika.cd</p>
+<p>Adresse : Goma, RDC</p>
+</div>
 </section>
 
 <!-- POPUP FORM -->
 <div class="popup" id="popup">
 <div class="popupContent">
 <h3>Publier Produit</h3>
-
 <input id="pName" placeholder="Nom produit">
-<input id="pPrice" placeholder="Prix">
+<input id="pPrice" placeholder="Prix (ex: 10000 FC)">
 <input id="pPhone" placeholder="Numéro">
 <input type="file" id="pImg">
-
 <button class="actionBtn" onclick="publish()">Publier</button>
 <button onclick="closePopup()">Fermer</button>
 </div>
 </div>
 
 <script>
+const API_KEY = "618601d9a107d1798c46d59b2701c760";
 
-/* NAV */
-function show(id){
-document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
-document.getElementById(id).classList.add("active");
-}
-
-/* POPUP */
-function openPopup(){ document.getElementById("popup").style.display="flex"; }
-function closePopup(){ document.getElementById("popup").style.display="none"; }
+/* NAVIGATION */
+function show(id){document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));document.getElementById(id).classList.add("active");}
+function openPopup(){document.getElementById("popup").style.display="flex";}
+function closePopup(){document.getElementById("popup").style.display="none";}
 
 /* MARKETPLACE */
-let products = JSON.parse(localStorage.getItem("products")) || [];
-
+let products = JSON.parse(localStorage.getItem("products"))||[];
 function publish(){
-
-let name = pName.value;
-let price = pPrice.value;
-let phone = pPhone.value;
-let file = pImg.files[0];
-
-if(!file) return alert("Ajoute image");
-
-let reader = new FileReader();
-
-reader.onload = function(){
-let product = {
-name,
-price,
-phone,
-img:reader.result
-};
-
-products.push(product);
-localStorage.setItem("products", JSON.stringify(products));
-
+let name=pName.value, price=pPrice.value, phone=pPhone.value, file=pImg.files[0];
+if(!file) return alert("Ajoutez une image");
+let reader=new FileReader();
+reader.onload=function(){
+products.push({name,price,phone,img:reader.result});
+localStorage.setItem("products",JSON.stringify(products));
 displayProducts();
 closePopup();
 };
-
 reader.readAsDataURL(file);
 }
-
 function displayProducts(){
-let container = document.getElementById("products");
+let container=document.getElementById("products");
 container.innerHTML="";
-
 products.forEach((p,i)=>{
-
 container.innerHTML+=`
-<div class="product">
+<div class="product" id="product${i}">
 <img src="${p.img}">
 <h3>${p.name}</h3>
 <p>💰 ${p.price}</p>
 <p>📞 ${p.phone}</p>
-
 <button class="actionBtn" onclick="buy('${p.phone}')">Acheter</button>
-<button onclick="share(${i})">Partager</button>
-
-</div>
-`;
+<button class="actionBtn" onclick="share(${i})">Partager</button>
+</div>`;
 });
 }
-
 displayProducts();
+function buy(phone){window.location.href="tel:"+phone;}
+function share(i){let link=location.href+"#product"+i;navigator.clipboard.writeText(link);alert("Lien copié !");}
 
-function buy(phone){
-window.location.href="tel:"+phone;
-}
-
-function share(i){
-let link = location.href+"#product"+i;
-navigator.clipboard.writeText(link);
-alert("Lien copié !");
-}
-
-/* IA AGRICOLE */
+/* IA */
 function askAI(){
-let input = aiInput.value.toLowerCase();
-let chat = document.getElementById("aiChat");
-
+let input=aiInput.value.toLowerCase();
+let chat=document.getElementById("aiChat");
 let rep="";
-
-if(input.includes("engrais"))
-rep="Utilisez compost organique ou NPK équilibré.";
-
-else if(input.includes("pluie"))
-rep="Planifiez semis avant saison pluvieuse.";
-
-else
-rep="Je conseille rotation cultures et analyse sol.";
-
-chat.innerHTML+=`<p><b>Vous:</b> ${input}</p>`;
-chat.innerHTML+=`<p><b>IA:</b> ${rep}</p>`;
+if(input.includes("engrais")) rep="Utilisez compost organique ou NPK équilibré.";
+else if(input.includes("pluie")) rep="Planifiez semis avant saison pluvieuse.";
+else rep="Je conseille rotation cultures et analyse sol.";
+chat.innerHTML+=`<p><b>Vous:</b> ${input}</p><p><b>IA:</b> ${rep}</p>`;
+chat.scrollTop=chat.scrollHeight;
 }
 
-/* METEO */
-async function loadWeather(){
-let res = await fetch("https://api.openweathermap.org/data/2.5/weather?q=Goma&appid=YOUR_API_KEY&units=metric");
-let data = await res.json();
-
-weather.innerHTML=`🌤 ${data.main.temp}°C - ${data.weather[0].description}`;
-}
-loadWeather();
-
-/* GPS */
+/* METEO GPS */
 function getLocation(){
-navigator.geolocation.getCurrentPosition(pos=>{
-location.innerText=`Latitude: ${pos.coords.latitude} Longitude: ${pos.coords.longitude}`;
+navigator.geolocation.getCurrentPosition(async pos=>{
+let lat=pos.coords.latitude, lon=pos.coords.longitude;
+document.getElementById("location").innerText=`Latitude: ${lat} Longitude: ${lon}`;
+try{
+let res = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`);
+let data = await res.json();
+document.getElementById("weatherGPS").innerHTML=`🌤 ${data.main.temp}°C - ${data.weather[0].description}`;
+document.getElementById("weather").innerHTML=`🌤 ${data.main.temp}°C - ${data.weather[0].description}`;
+}catch{document.getElementById("weatherGPS").innerText="Météo indisponible";}
 });
 }
-
 </script>
 
 </body>
