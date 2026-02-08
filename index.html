@@ -1,310 +1,345 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hakika Agriconnect</title>
+<title>AgriConnect Africa</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
-body{margin:0;font-family:Poppins;background:#050b18;color:#dbeafe;scroll-behavior:smooth;}
-nav{position:fixed;top:0;width:100%;background:rgba(5,11,24,0.95);backdrop-filter:blur(10px);padding:15px;z-index:1000;}
-nav ul{display:flex;justify-content:center;gap:25px;list-style:none;margin:0;padding:0;}
-nav a{color:#60a5fa;text-decoration:none;font-weight:600;transition:0.3s;}
-nav a:hover{color:#93c5fd;}
-section{min-height:100vh;padding:100px 20px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;background-size:cover;background-position:center;scroll-margin-top:80px;}
-h1{font-size:40px;margin-bottom:10px;} h2{color:#93c5fd;}
-.card{background:rgba(15,23,42,0.85);padding:20px;border-radius:15px;margin:15px;width:320px;box-shadow:0 0 20px rgba(96,165,250,0.3);transition:0.3s;}
-.card:hover{transform:translateY(-5px);box-shadow:0 0 25px rgba(96,165,250,0.5);}
-input,textarea,select{width:90%;padding:12px;margin:10px 0;border:none;border-radius:8px;background:#020617;color:white;}
-button{padding:12px 20px;border:none;border-radius:8px;background:#2563eb;color:white;cursor:pointer;transition:0.3s;}
-button:hover{background:#1d4ed8;transform:scale(1.05);}
-.grid{display:flex;flex-wrap:wrap;justify-content:center;gap:15px;}
-#chatBox{height:250px;overflow-y:auto;background:#020617;padding:10px;border-radius:10px;margin-bottom:10px;width:300px;}
-img.agri{width:100%;border-radius:12px;margin-top:10px;}
-#map{height:300px;width:90%;border-radius:12px;margin-top:10px;}
-footer{background:rgba(5,11,24,0.9);color:#60a5fa;padding:20px;text-align:center;}
-footer a{color:#60a5fa;margin:0 10px;text-decoration:none;}
-footer a:hover{color:#93c5fd;}
-#footerLoginBtn{margin-top:10px;}
+body{font-family:'Poppins',sans-serif;margin:0;background:#f4f6f8;color:#1b5e20;scroll-behavior:smooth;}
+header{background:#2E7D32;color:white;padding:15px;text-align:center;font-weight:bold;font-size:1.2rem;position:sticky;top:0;z-index:1000;text-shadow:1px 1px 2px #000;display:flex;justify-content:space-between;align-items:center;}
+header button{background:#fff;color:#2E7D32;border:none;padding:6px 12px;border-radius:20px;cursor:pointer;font-size:13px;transition:0.3s;}
+header button:hover{background:#d9d9d9;transform:scale(1.05);}
+nav{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;background:#1B5E20;padding:8px;position:sticky;top:60px;z-index:900;}
+nav button{background:white;border:none;padding:6px 12px;border-radius:20px;cursor:pointer;font-size:13px;transition:0.3s;box-shadow:0 2px 5px rgba(0,0,0,0.2);}
+nav button:hover{background:#d9d9d9;transform:scale(1.05);}
+section{opacity:0;transform:translateY(50px);transition:all 0.8s ease;display:none;padding:40px 20px;min-height:80vh;text-align:center;background-size:cover;background-position:center;position:relative;color:#fff;}
+section.active{display:block;opacity:1;transform:translateY(0);}
+.hero{background:rgba(0,0,0,0.4);padding:30px;border-radius:12px;display:inline-block;}
+.hero img{width:100%;max-width:350px;border-radius:12px;margin-bottom:15px;box-shadow:0 4px 8px rgba(0,0,0,0.4);}
+.actionBtn{background:#2E7D32;color:white;border:none;padding:8px 16px;border-radius:20px;cursor:pointer;font-size:14px;margin-top:10px;transition:0.3s;box-shadow:0 0 8px #2E7D32;}
+.actionBtn:hover{background:#1b5e20;box-shadow:0 0 12px #1b5e20;transform:scale(1.05);}
+.product{background:white;padding:15px;margin-top:10px;border-radius:12px;box-shadow:0 3px 8px rgba(0,0,0,0.3);color:#000;transition:0.3s;}
+.product:hover{box-shadow:0 0 15px #2E7D32;transform:scale(1.02);}
+.product img{width:100%;border-radius:12px;margin-bottom:8px;}
+.popup{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);display:none;justify-content:center;align-items:center;z-index:2000;}
+.popupContent{background:white;padding:20px;border-radius:12px;width:90%;max-width:350px;}
+input,textarea{width:100%;padding:8px;margin-top:8px;border-radius:8px;border:1px solid #ccc;}
+.chatBox{height:200px;overflow-y:auto;background:white;padding:10px;border-radius:12px;margin-bottom:10px;color:#000;}
+h2{margin-bottom:15px;text-shadow:1px 1px 2px #000;}
+img.sectionImg{width:100%;border-radius:12px;margin-top:15px;box-shadow:0 2px 4px rgba(0,0,0,0.3);}
+.card{background:rgba(255,255,255,0.9);color:#000;padding:15px;border-radius:12px;margin-bottom:15px;box-shadow:0 2px 6px rgba(0,0,0,0.2);}
 </style>
 </head>
 <body>
+
+<header>
+🌍 Connecter les agriculteurs africains au marché réel
+<button onclick="toggleLogin()">Connexion / Inscription</button>
+</header>
+
 <nav>
-<ul>
-<li><a href="#home">Accueil</a></li>
-<li><a href="#about">À propos</a></li>
-<li><a href="#market">Marketplace</a></li>
-<li><a href="#chat">Chat</a></li>
-<li><a href="#geo">Géolocalisation</a></li>
-<li><a href="#meteo">Météo</a></li>
-<li><a href="#stats">Statistiques</a></li>
-<li><a href="#ai">Assistant IA</a></li>
-<li><a href="#partner">Partenaire</a></li>
-</ul>
+<button onclick="show('home')">Accueil</button>
+<button onclick="show('market')">Marketplace</button>
+<button onclick="show('ai')">Assistant IA</button>
+<button onclick="show('meteo')">Météo</button>
+<button onclick="show('gps')">Localisation</button>
+<button onclick="show('about')">Qui sommes-nous</button>
+<button onclick="show('faq')">FAQ</button>
+<button onclick="show('privacy')">Confidentialité</button>
+<button onclick="show('contact')">Contact</button>
 </nav>
 
-<!-- 1 ACCUEIL -->
-<section id="home" style="background-image:url('https://images.unsplash.com/photo-1592982537447-6d96e902ef4c');">
-<h1>Hakika Agriconnect</h1>
+<!-- ACCUEIL -->
+<section id="home" class="active" style="background-image:url('https://images.unsplash.com/photo-1592982537447-6d96e902ef4c');">
+<div class="hero">
+<img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef">
 <h2>Connecter les agriculteurs africains au marché réel</h2>
-<p>Produisez. Publiez. Vendez. Transformez votre récolte en opportunité.</p>
-<div class="card">
-<h3>Assistant IA agricole</h3>
-<div id="aiBoxHome"></div>
-<input id="aiInputHome" placeholder="Pose ta question agricole">
-<button onclick="askAIHome()">Demander</button>
+<p>Plateforme digitale innovante pour vendre, apprendre et se connecter facilement.</p>
 </div>
 </section>
 
-<!-- 2 A PROPOS -->
-<section id="about" style="background-image:url('https://images.unsplash.com/photo-1500937386664-56d1dfef3854');">
-<h1>Notre mission</h1>
-<div class="card">
-<p>Hakika Agriconnect digitalise l'agriculture locale et connecte producteurs, acheteurs et investisseurs.</p>
-<img class="agri" src="https://images.unsplash.com/photo-1574943320219-553eb213f72d">
-</div>
-</section>
-
-<!-- 3 MARKETPLACE -->
+<!-- MARKETPLACE -->
 <section id="market" style="background-image:url('https://images.unsplash.com/photo-1464226184884-fa280b87c399');">
-<h1>Marketplace agricole</h1>
-<div class="card">
-<input id="prodName" placeholder="Nom du produit">
-<input type="file" id="prodImg">
-<select id="payMethod">
-<option value="Orange Money">Orange Money</option>
-<option value="Airtel Money">Airtel Money</option>
-<option value="Vodacom Money">Vodacom Money</option>
-</select>
-<button onclick="addProduct()">Publier produit</button>
-</div>
-<div id="products" class="grid"></div>
+<h2>Marketplace Agricole</h2>
+<button class="actionBtn" onclick="openPopup()">Publier vos produits ici</button>
+<div id="products"></div>
 </section>
 
-<!-- 4 CHAT -->
-<section id="chat" style="background-image:url('https://images.unsplash.com/photo-1523741543316-beb7fc7023d8');">
-<h1>Espace discussion producteurs</h1>
-<div id="chatBox"></div>
-<input id="chatInput" placeholder="Votre message">
-<button onclick="sendMsg()">Envoyer</button>
-</section>
-
-<!-- 5 GEO -->
-<section id="geo" style="background-image:url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee');">
-<h1>Localiser votre champ</h1>
-<button onclick="geo()">Afficher ma position</button>
-<p id="geoResult"></p>
-<div id="map"></div>
-</section>
-
-<!-- 6 METEO -->
-<section id="meteo" style="background-image:url('https://images.unsplash.com/photo-1504384308090-c894fdcc538d');">
-<h1>Météo Goma IA</h1>
-<div class="card" id="weatherCard">
-<p id="weatherDesc"></p>
-<p id="weatherTemp"></p>
-<p id="weatherHum"></p>
-<p id="weatherWind"></p>
-<p id="weatherSun"></p>
-</div>
-</section>
-
-<!-- 7 STATS -->
-<section id="stats" style="background-image:url('https://images.unsplash.com/photo-1454165804606-c3d57bc86b40');">
-<h1>Statistiques agricoles</h1>
-<canvas id="chart" width="300"></canvas>
-</section>
-
-<!-- 8 IA -->
-<section id="ai" style="background-image:url('https://images.unsplash.com/photo-1518779578993-ec3579fee39f');">
-<h1>Assistant IA agricole</h1>
-<div id="aiBox"></div>
+<!-- IA -->
+<section id="ai" style="background-image:url('https://images.unsplash.com/photo-1523362628745-0c100150b7d3');">
+<h2>Assistant Agricole IA</h2>
+<div class="chatBox" id="aiChat"></div>
 <input id="aiInput" placeholder="Pose ta question agricole">
-<button onclick="askAI()">Demander</button>
+<button class="actionBtn" onclick="askAI()">Envoyer</button>
 </section>
 
-<!-- 9 LOGIN -->
-<section id="login" style="background-image:url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f');display:none;">
-<h1>Espace utilisateur</h1>
+<!-- METEO -->
+<section id="meteo" style="background-image:url('https://images.unsplash.com/photo-1504384308090-c894fdcc538d');">
+<h2>Météo Agricole</h2>
+<div class="card" id="weather">Chargement...</div>
+</section>
+
+<!-- GPS -->
+<section id="gps" style="background-image:url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee');">
+<h2>Localiser mon champ</h2>
+<button class="actionBtn" onclick="getLocation()">Obtenir localisation</button>
+<p id="location"></p>
+<div class="card" id="weatherGPS"></div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" style="background-image:url('https://images.unsplash.com/photo-1574943320219-553eb213f72d');">
+<h2>Qui sommes-nous</h2>
+<div class="card">
+<p><strong>Hakika Agriconnect</strong> est une plateforme numérique innovante développée par <strong>COFCI</strong> pour connecter agriculteurs, consommateurs et partenaires via un écosystème intégré.</p>
+<p>Notre mission est de faciliter l’accès au marché, fournir des informations agricoles fiables, promouvoir des produits bio et améliorer la sécurité alimentaire en RDC. Nous aidons les producteurs à valoriser chaque récolte et à renforcer la durabilité de leur activité.</p>
+<p>Nous combinons technologie et intelligence artificielle pour offrir conseils agricoles, analyses météo et support en temps réel, créant ainsi une communauté solide et productive.</p>
+<p style="font-weight:bold;color:#2E7D32;">Rejoignez-nous pour transformer l’agriculture africaine avec impact et innovation.</p>
+<img class="sectionImg" src="https://images.unsplash.com/photo-1550258987-190a2d41a8ba">
+</div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" style="background-image:url('https://images.unsplash.com/photo-1528825871115-3581a5387919');">
+<h2>FAQ</h2>
+<div class="card">
+<h3>Comment publier mes produits ?</h3>
+<p>Cliquez sur "Publier vos produits ici" dans Marketplace et remplissez le formulaire.</p>
+</div>
+<div class="card">
+<h3>Comment contacter l'équipe ?</h3>
+<p>Par email à contact@hakika.cd ou via la section Contact.</p>
+</div>
+<div class="card">
+<h3>Moyens de paiement acceptés</h3>
+<p>Orange Money, Airtel Money et Vodacom Money.</p>
+</div>
+</section>
+
+<!-- PRIVACY -->
+<section id="privacy" style="background-image:url('https://images.unsplash.com/photo-1507679799987-c73779587ccf');">
+<h2>Confidentialité</h2>
+<div class="card">
+<p>Les données collectées sont utilisées uniquement pour sécuriser les transactions et améliorer l’expérience utilisateur. Nous ne partageons jamais vos informations personnelles sans consentement.</p>
+</div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" style="background-image:url('https://images.unsplash.com/photo-1504384308090-c894fdcc538d');">
+<h2>Contactez-nous</h2>
+<div class="card">
+<p>Email : contact@hakika.cd</p>
+<p>Adresse : Goma, RDC</p>
+</div>
+</section>
+
+<!-- POPUP PRODUIT -->
+<div class="popup" id="popup">
+<div class="popupContent">
+<h3>Publier Produit</h3>
+<input id="pName" placeholder="Nom produit">
+<input id="pPrice" placeholder="Prix (ex: 10000 FC)">
+<input id="pPhone" placeholder="Numéro">
+<input type="file" id="pImg">
+<button class="actionBtn" onclick="publish()">Publier</button>
+<button onclick="closePopup()">Fermer</button>
+</div>
+</div>
+
+<!-- POPUP LOGIN -->
+<div class="popup" id="loginPopup">
+<div class="popupContent">
+<h3>Connexion / Inscription</h3>
 <input id="email" placeholder="Email">
 <input id="password" placeholder="Mot de passe">
-<button onclick="loginUser()">Connexion</button>
-<h2>Créer compte</h2>
+<button class="actionBtn" onclick="loginUser()">Connexion</button>
+<h3>Créer compte</h3>
 <input id="fullname" placeholder="Nom complet">
 <input id="phone" placeholder="Téléphone">
 <input id="newEmail" placeholder="Email">
 <input id="newPassword" placeholder="Mot de passe">
-<button onclick="createUser()">Créer</button>
-</section>
-
-<!-- 10 PARTENAIRE -->
-<section id="partner" style="background-image:url('https://images.unsplash.com/photo-1507679799987-c73779587ccf');">
-<h1>Devenir partenaire Hakika</h1>
-<input placeholder="Nom entreprise">
-<input placeholder="Contact">
-<textarea placeholder="Proposition partenariat"></textarea>
-<button>Envoyer demande</button>
-</section>
-
-<footer>
-<a href="#">FAQ</a> | <a href="#">Confidentialité</a>
-<br>
-<button id="footerLoginBtn" onclick="document.getElementById('login').scrollIntoView({behavior:'smooth'})">Se connecter</button>
-</footer>
+<button class="actionBtn" onclick="createUser()">Créer compte</button>
+<button onclick="toggleLogin()">Fermer</button>
+</div>
+</div>
 
 <script>
-// ===== FIREBASE CONFIG =====
-const firebaseConfig = {
-apiKey: "AIzaSyADgmdNHD9czAWeAkR_eEJS3OHbqBg8Rd4",
-authDomain: "hakika-agriconnect-cofci-3a733.firebaseapp.com",
-databaseURL: "https://hakika-agriconnect-cofci-3a733-default-rtdb.firebaseio.com",
-projectId: "hakika-agriconnect-cofci-3a733",
-storageBucket: "hakika-agriconnect-cofci-3a733.appspot.com",
-messagingSenderId: "395415064040",
-appId: "1:395415064040:web:9bf84863feeb20a918285d",
-measurementId: "G-T72RE8Z3X2"
+const API_KEY = "618601d9a107d1798c46d59b2701c760";
+
+/* NAVIGATION */
+function show(id){document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));document.getElementById(id).classList.add("active");}
+
+/* POPUP */
+function openPopup(){document.getElementById("popup").style.display="flex";}
+function closePopup(){document.getElementById("popup").style.display="none";}
+function toggleLogin(){let l=document.getElementById("loginPopup");l.style.display=l.style.display==="flex"?"none":"flex";}
+
+/* MARKETPLACE */
+let products = JSON.parse(localStorage.getItem("products"))||[];
+function publish(){
+let name=pName.value, price=pPrice.value, phone=pPhone.value, file=pImg.files[0];
+if(!file) return alert("Ajoutez une image");
+let reader=new FileReader();
+reader.onload=function(){
+products.push({name,price,phone,img:reader.result});
+localStorage.setItem("products",JSON.stringify(products));
+displayProducts();
+closePopup();
 };
-firebase.initializeApp(firebaseConfig);
-const auth=firebase.auth();
-const db=firebase.database();
-const storage=firebase.storage();
-
-// ===== AUTH =====
-function createUser(){
-  const email=document.getElementById("newEmail").value;
-  const password=document.getElementById("newPassword").value;
-  const fullname=document.getElementById("fullname").value;
-  const phone=document.getElementById("phone").value;
-  auth.createUserWithEmailAndPassword(email,password)
-  .then(user=>{
-    db.ref('users/'+user.user.uid).set({fullname,email,phone});
-    alert("Compte créé !");
-  }).catch(err=>alert(err.message));
+reader.readAsDataURL(file);
 }
-function loginUser(){
-  const email=document.getElementById("email").value;
-  const password=document.getElementById("password").value;
-  auth.signInWithEmailAndPassword(email,password)
-  .then(()=>alert("Connexion réussie !"))
-  .catch(err=>alert(err.message));
-}
-
-// ===== MARKETPLACE =====
-function addProduct(){
-  const name=document.getElementById("prodName").value;
-  const file=document.getElementById("prodImg").files[0];
-  const pay=document.getElementById("payMethod").value;
-  const time=new Date().toLocaleString();
-  if(!file){alert("Ajouter une image"); return;}
-  const storageRef=storage.ref('products/'+file.name);
-  storageRef.put(file).then(snap=>{
-    snap.ref.getDownloadURL().then(url=>{
-      const prodRef=db.ref('products').push();
-      prodRef.set({name,url,pay,time});
-    });
-  });
-}
-db.ref('products').on('value',snap=>{
-  const grid=document.getElementById("products");
-  grid.innerHTML="";
-  snap.forEach(prod=>{
-    const p=prod.val();
-    const div=document.createElement("div");
-    div.className="card";
-    div.innerHTML=`<h3>${p.name}</h3><img class="agri" src="${p.url}"><p>${p.pay} | ${p.time}</p>`;
-    grid.appendChild(div);
-  });
-});
-
-// ===== CHAT =====
-function sendMsg(){
-  const input=document.getElementById("chatInput");
-  if(input.value.trim()==="") return;
-  const msgRef=db.ref('chat').push();
-  msgRef.set({msg:input.value,time:new Date().toLocaleString()});
-  input.value="";
-}
-db.ref('chat').on('value',snap=>{
-  const box=document.getElementById("chatBox");
-  box.innerHTML="";
-  snap.forEach(m=>{
-    const mVal=m.val();
-    box.innerHTML+=`<p><b>Agriculteur :</b> ${mVal.msg} <small>(${mVal.time})</small></p>`;
-  });
-  box.scrollTop=box.scrollHeight;
-});
-
-// ===== GEO =====
-function geo(){
-navigator.geolocation.getCurrentPosition(pos=>{
-const lat=pos.coords.latitude;
-const lon=pos.coords.longitude;
-document.getElementById("geoResult").innerText=`Latitude: ${lat} Longitude: ${lon}`;
-const mapDiv=document.getElementById("map");
-mapDiv.innerHTML=`<iframe width="100%" height="300" src="https://maps.google.com/maps?q=${lat},${lon}&z=15&output=embed"></iframe>`;
+function displayProducts(){
+let container=document.getElementById("products");
+container.innerHTML="";
+products.forEach((p,i)=>{
+container.innerHTML+=`
+<div class="product" id="product${i}">
+<img src="${p.img}">
+<h3>${p.name}</h3>
+<p>💰 ${p.price}</p>
+<p>📞 ${p.phone}</p>
+<button class="actionBtn" onclick="buy('${p.phone}')">Acheter</button>
+<button class="actionBtn" onclick="share(${i})">Partager</button>
+<button class="actionBtn" onclick="downloadProduct(${i})">Télécharger fiche</button>
+</div>`;
 });
 }
+displayProducts();
+function buy(phone){window.location.href="tel:"+phone;}
+function share(i){let link=location.href+"#product"+i;navigator.clipboard.writeText(link);alert("Lien copié !");}
+function downloadProduct(i){
+let p=products[i];
+let data = `Nom: ${p.name}\nPrix: ${p.price}\nTéléphone: ${p.phone}`;
+let blob = new Blob([data], {type:"text/plain"});
+let url = URL.createObjectURL(blob);
+let a = document.createElement("a"); a.href=url; a.download=p.name+".txt"; a.click(); URL.revokeObjectURL(url);
+}
 
-// ===== STATS =====
-new Chart(document.getElementById("chart"),{type:"line",data:{labels:["Jan","Fev","Mar","Avr","Mai"],datasets:[{label:"Production",data:[12,19,8,15,22]}]}});
+/* IA */
+function askAI(){
+let input=aiInput.value.toLowerCase();
+let chat=document.getElementById("aiChat");
+let rep="";
+if(input.includes("engrais")) rep="Utilisez compost organique ou NPK équilibré.";
+else if(input.includes("pluie")) rep="Planifiez semis avant saison pluvieuse.";
+else rep="Je conseille rotation cultures et analyse sol.";
+chat.innerHTML+=`<p><b>Vous:</b> ${input}</p><p><b>IA:</b> ${rep}</p>`;
+chat.scrollTop=chat.scrollHeight;
+}
 
-// ===== METEO =====
-const WEATHER_API_KEY = "dced199e16bf91df98f41aabc3f8984b";
-async function fetchWeather(){
+/* ===== METEO + LOCALISATION PROFESSIONNEL ===== */
+
+async function loadWeather(lat, lon){
+
 try{
-const res=await fetch(`https://api.openweathermap.org/data/2.5/weather?q=Goma,CD&appid=${WEATHER_API_KEY}&units=metric`);
-const data=await res.json();
-document.getElementById("weatherDesc").innerText=`${data.weather[0].description}`;
-document.getElementById("weatherTemp").innerText=`Temp: ${data.main.temp}°C`;
-document.getElementById("weatherHum").innerText=`Humidité: ${data.main.humidity}%`;
-document.getElementById("weatherWind").innerText=`Vent: ${data.wind.speed} m/s`;
-const sunrise=new Date(data.sys.sunrise*1000).toLocaleTimeString();
-const sunset=new Date(data.sys.sunset*1000).toLocaleTimeString();
-document.getElementById("weatherSun").innerText=`Lever: ${sunrise} | Coucher: ${sunset}`;
-}catch(e){document.getElementById("weatherCard").innerText="Météo non disponible";}
-}
-fetchWeather();
 
-// ===== IA GPT =====
-const OPENAI_KEY="dced199e16bf91df98f41aabc3f8984b";
-async function askAI(){
-const q=document.getElementById("aiInput").value;
-const rBox=document.getElementById("aiBox");
-rBox.innerHTML+="<p>Analyse en cours...</p>";
-const res=await fetch("https://api.openai.com/v1/responses",{
-method:"POST",
-headers:{
-"Content-Type":"application/json",
-"Authorization":`Bearer ${OPENAI_KEY}`
-},
-body:JSON.stringify({model:"gpt-5-nano",input:q})
-});
-const data=await res.json();
-const answer=data.output_text || "Aucune réponse";
-rBox.innerHTML+=`<p>${answer}</p>`;
+let res = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=a5c54e882dfe6ea680cb7ec514fa88bd&units=metric&lang=fr`);
+
+let data = await res.json();
+
+/* Conseils agricoles intelligents */
+let conseil="Conditions normales pour agriculture.";
+if(data.main.humidity > 80) conseil="⚠ Forte humidité : surveiller maladies fongiques.";
+if(data.wind.speed > 8) conseil="⚠ Vent fort : protéger cultures fragiles.";
+if(data.main.temp > 32) conseil="⚠ Forte chaleur : arroser tôt matin ou soir.";
+
+/* Affichage météo principal */
+let weatherHTML = `
+🌍 Ville : ${data.name} <br>
+🌡 Température : ${data.main.temp} °C <br>
+💨 Vent : ${data.wind.speed} m/s <br>
+💧 Humidité : ${data.main.humidity}% <br>
+🌦 Description : ${data.weather[0].description} <br>
+🌱 Conseil agricole : ${conseil}
+`;
+
+document.getElementById("weather").innerHTML = weatherHTML;
+document.getElementById("weatherGPS").innerHTML = weatherHTML;
+
+}catch(error){
+
+document.getElementById("weather").innerHTML="Impossible de charger météo";
+document.getElementById("weatherGPS").innerHTML="Impossible de charger météo";
+
 }
-async function askAIHome(){
-const q=document.getElementById("aiInputHome").value;
-const rBox=document.getElementById("aiBoxHome");
-rBox.innerHTML+="<p>Analyse en cours...</p>";
-const res=await fetch("https://api.openai.com/v1/responses",{
-method:"POST",
-headers:{
-"Content-Type":"application/json",
-"Authorization":`Bearer ${OPENAI_KEY}`
+
+}
+
+/* ===== GPS ===== */
+
+function getLocation(){
+
+if(!navigator.geolocation){
+
+alert("Géolocalisation non supportée");
+return;
+
+}
+
+navigator.geolocation.getCurrentPosition(
+
+pos => {
+
+let lat = pos.coords.latitude;
+let lon = pos.coords.longitude;
+
+document.getElementById("location").innerText =
+`📍 Latitude : ${lat.toFixed(4)} | Longitude : ${lon.toFixed(4)}`;
+
+loadWeather(lat, lon);
+
 },
-body:JSON.stringify({model:"gpt-5-nano",input:q})
+
+err => {
+
+alert("Autorisez la localisation pour voir la météo");
+
+}
+
+);
+
+}
+
+/* Charger météo automatiquement quand page météo ouverte */
+function autoWeather(){
+
+if(navigator.geolocation){
+
+navigator.geolocation.getCurrentPosition(pos => {
+
+loadWeather(pos.coords.latitude, pos.coords.longitude);
+
 });
-const data=await res.json();
-const answer=data.output_text || "Aucune réponse";
-rBox.innerHTML+=`<p>${answer}</p>`;
+
+}
+
+}
+
+/* Lancer auto météo */
+window.onload = autoWeather;
+/* SCROLL FADE-IN */
+window.addEventListener("scroll",()=>{document.querySelectorAll("section").forEach(sec=>{let top=sec.getBoundingClientRect().top,h=window.innerHeight;if(top<h-100){sec.classList.add("active");}});});
+
+/* LOGIN & CREATE (localStorage simulation simple) */
+function loginUser(){
+let email=document.getElementById("email").value;
+let password=document.getElementById("password").value;
+let users=JSON.parse(localStorage.getItem("users")||"[]");
+if(users.find(u=>u.email===email && u.password===password)){alert("Connexion réussie !");toggleLogin();}
+else alert("Email ou mot de passe incorrect.");
+}
+function createUser(){
+let name=document.getElementById("fullname").value;
+let phone=document.getElementById("phone").value;
+let email=document.getElementById("newEmail").value;
+let password=document.getElementById("newPassword").value;
+let users=JSON.parse(localStorage.getItem("users")||"[]");
+users.push({name,phone,email,password});
+localStorage.setItem("users",JSON.stringify(users));
+alert("Compte créé !");toggleLogin();
 }
 </script>
+
 </body>
 </html>
