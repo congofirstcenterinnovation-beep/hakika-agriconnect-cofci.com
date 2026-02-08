@@ -80,6 +80,7 @@ img.sectionImg{width:100%;border-radius:12px;margin-top:15px;box-shadow:0 2px 4p
 <section id="meteo" style="background-image:url('https://images.unsplash.com/photo-1504384308090-c894fdcc538d');">
 <h2>Météo Agricole</h2>
 <div class="card" id="weather">Chargement...</div>
+<button onclick="loadWeather(0,0)">Test météo Paris</button>
 </section>
 
 <!-- GPS -->
@@ -166,6 +167,7 @@ img.sectionImg{width:100%;border-radius:12px;margin-top:15px;box-shadow:0 2px 4p
 </div>
 </div>
 
+<!-- ================= SCRIPT ================= -->
 <script>
 const API_KEY = "618601d9a107d1798c46d59b2701c760";
 
@@ -214,59 +216,46 @@ function downloadProduct(i){let p=products[i];let data=`Nom: ${p.name}\nPrix: ${
 /* IA */
 function askAI(){let input=aiInput.value.toLowerCase();let chat=document.getElementById("aiChat");let rep="";if(input.includes("engrais")) rep="Utilisez compost organique ou NPK équilibré."; else if(input.includes("pluie")) rep="Planifiez semis avant saison pluvieuse."; else rep="Je conseille rotation cultures et analyse sol."; chat.innerHTML+=`<p><b>Vous:</b> ${input}</p><p><b>IA:</b> ${rep}</p>`; chat.scrollTop=chat.scrollHeight;}
 
-/* MÉTÉO + LOCALISATION avec fallback Goma */
+/* MÉTÉO */
 async function loadWeather(lat, lon){
-    if(!lat && !lon){ lat=1.6785; lon=29.2333; } // Goma RDC par défaut
-    try{
-        let res = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric&lang=fr`);
-        let data = await res.json();
-        let conseil = "Conditions normales pour agriculture.";
-        if(data.main.humidity>80) conseil="⚠ Forte humidité : surveiller maladies fongiques.";
-        if(data.wind.speed>8) conseil="⚠ Vent fort : protéger cultures fragiles.";
-        if(data.main.temp>32) conseil="⚠ Forte chaleur : arroser tôt matin ou soir.";
-        let icon=data.weather[0].icon;
-        let weatherHTML = `🌍 Ville : ${data.name} <br>
-        <img src="https://openweathermap.org/img/wn/${icon}@2x.png" alt="météo"><br>
-        🌡 Température : ${data.main.temp} °C <br>
-        💨 Vent : ${data.wind.speed} m/s <br>
-        💧 Humidité : ${data.main.humidity}% <br>
-        🌦 Description : ${data.weather[0].description} <br>
-        🌱 Conseil agricole : ${conseil}`;
-        document.getElementById("weather").innerHTML = weatherHTML;
-        document.getElementById("weatherGPS").innerHTML = weatherHTML;
-    } catch(err){console.error(err);document.getElementById("weather").innerHTML="Impossible de charger météo";document.getElementById("weatherGPS").innerHTML="Impossible de charger météo";}
+try{
+let res=await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric&lang=fr`);
+let data=await res.json();
+let conseil="Conditions normales pour agriculture.";
+if(data.main.humidity>80) conseil="⚠ Forte humidité : surveiller maladies fongiques.";
+if(data.wind.speed>8) conseil="⚠ Vent fort : protéger cultures fragiles.";
+if(data.main.temp>32) conseil="⚠ Forte chaleur : arroser tôt matin ou soir.";
+let icon=data.weather[0].icon;
+let weatherHTML=`🌍 Ville : ${data.name} <br>
+<img src="https://openweathermap.org/img/wn/${icon}@2x.png" alt="météo"><br>
+🌡 Température : ${data.main.temp} °C <br>
+💨 Vent : ${data.wind.speed} m/s <br>
+💧 Humidité : ${data.main.humidity}% <br>
+🌦 Description : ${data.weather[0].description} <br>
+🌱 Conseil agricole : ${conseil}`;
+document.getElementById("weather").innerHTML=weatherHTML;
+document.getElementById("weatherGPS").innerHTML=weatherHTML;
+}catch(error){console.error(error);document.getElementById("weather").innerHTML="Impossible de charger météo";document.getElementById("weatherGPS").innerHTML="Impossible de charger météo";}
 }
 
+/* LOCALISATION */
 function getLocation(){
-    if(!navigator.geolocation){
-        alert("Géolocalisation non supportée, météo par défaut Goma.");
-        document.getElementById("location").innerText="Localisation non supportée, météo par défaut Goma.";
-        loadWeather();
-        return;
-    }
-    navigator.geolocation.getCurrentPosition(
-        pos=>{
-            let lat=pos.coords.latitude, lon=pos.coords.longitude;
-            document.getElementById("location").innerText=`📍 Latitude : ${lat.toFixed(4)} | Longitude : ${lon.toFixed(4)}`;
-            loadWeather(lat,lon);
-        },
-        err=>{
-            alert("Autorisez la localisation pour voir votre météo exacte. Affichage par défaut Goma.");
-            document.getElementById("location").innerText="Localisation non autorisée, météo par défaut Goma.";
-            loadWeather();
-        }
-    );
+if(!navigator.geolocation){alert("Géolocalisation non supportée");document.getElementById("location").innerText="Localisation non supportée";return;}
+navigator.geolocation.getCurrentPosition(pos=>{let lat=pos.coords.latitude;let lon=pos.coords.longitude;document.getElementById("location").innerText=`📍 Latitude : ${lat.toFixed(4)} | Longitude : ${lon.toFixed(4)}`;loadWeather(lat,lon);},err=>{alert("Autorisez la localisation pour voir la météo");document.getElementById("location").innerText="Localisation non autorisée";});
 }
+
+/* AUTO MÉTÉO */
+function autoWeather(){if(navigator.geolocation){navigator.geolocation.getCurrentPosition(pos=>{loadWeather(pos.coords.latitude,pos.coords.longitude);});}}
 
 /* SCROLL FADE-IN */
-window.addEventListener("scroll",()=>{document.querySelectorAll("section").forEach(sec=>{let top=sec.getBoundingClientRect().top,h=window.innerHeight;if(top<h-100) sec.classList.add("active");if(sec.id==="meteo"&&!sec.dataset.loaded){sec.dataset.loaded=true;getLocation();}});});
+window.addEventListener("scroll",()=>{document.querySelectorAll("section").forEach(sec=>{let top=sec.getBoundingClientRect().top,h=window.innerHeight;if(top<h-100) sec.classList.add("active");if(sec.id==="meteo"&&!sec.dataset.loaded){sec.dataset.loaded=true;if(navigator.geolocation){navigator.geolocation.getCurrentPosition(pos=>{loadWeather(pos.coords.latitude,pos.coords.longitude);});}}});});
 
 /* LOGIN / CREATE USER */
 function loginUser(){let email=document.getElementById("email").value;let password=document.getElementById("password").value;let users=JSON.parse(localStorage.getItem("users")||"[]");if(users.find(u=>u.email===email && u.password===password)){alert("Connexion réussie !");toggleLogin();}else alert("Email ou mot de passe incorrect.");}
 function createUser(){let name=document.getElementById("fullname").value;let phone=document.getElementById("phone").value;let email=document.getElementById("newEmail").value;let password=document.getElementById("newPassword").value;let users=JSON.parse(localStorage.getItem("users")||"[]");users.push({name,phone,email,password});localStorage.setItem("users",JSON.stringify(users));alert("Compte créé !");toggleLogin();}
 
 /* INITIALISATION */
-window.onload = getLocation;
+window.onload=autoWeather;
 displayProducts();
 </script>
 
